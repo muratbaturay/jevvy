@@ -304,7 +304,44 @@ questions:
       </section>
       <!-- /region:go-deeper -->
       <!-- region:worktree-method -->
-      <section id="worktree-method" class="region chapter" aria-labelledby="h-worktree-method"><h2 id="h-worktree-method" class="headline">02 · The Worktree Method</h2></section>
+      <section id="worktree-method" class="region chapter" aria-labelledby="h-worktree-method">
+        <div class="bar chapter__bar" data-reveal>
+          <h2 id="h-worktree-method" class="headline">02 · The Worktree Method</h2>
+          <span class="bar__note">Same codebase · parallel progress · no collisions</span>
+        </div>
+        <p class="chapter__sub" data-reveal style="--i:1">Four agents, four branches, no shared files. Speed comes from isolation, not headcount.</p>
+
+        <h3 class="label chapter__h3" data-reveal>Isolate the work before you parallelize it</h3>
+        <figure class="demo worktree" data-demo="worktree" data-reveal style="--i:1">
+          <div class="worktree__repo bar"><span class="headline">Main repository</span><span class="bar__note">single source of truth</span></div>
+          <ul class="worktree__columns" data-columns></ul>
+          <div class="worktree__queue">
+            <div class="panel panel--marker worktree__merge"><p class="panel__title">Verified merge queue</p><ol class="worktree__merged label" data-merged aria-label="Merged in order"></ol></div>
+            <div class="bar worktree__release"><span class="headline">One clean release</span><span class="stamp" data-release-stamp hidden>1 clean release</span></div>
+          </div>
+          <div class="demo__controls worktree__controls">
+            <label class="worktree__toggle"><input type="checkbox" data-isolation-toggle> Without isolation</label>
+            <p class="label" data-tally aria-live="polite"></p>
+            <button type="button" class="btn" data-replay>Replay</button>
+          </div>
+          <figcaption class="narration" data-narration aria-live="polite">Four worktrees fill in parallel. Watch the merge queue.</figcaption>
+          <ol class="worktree__log label" data-log hidden></ol>
+        </figure>
+
+        <h3 class="label chapter__h3" data-reveal>The no-collision rules</h3>
+        <ol class="rules" data-reveal style="--i:1">
+          <li class="card"><span class="label soft">01</span><span class="card__title">One owner per file</span><span class="card__body">Each file has exactly one responsible worktree. If two tasks need the same file, they are one task.</span></li>
+          <li class="card"><span class="label soft">02</span><span class="card__title">One branch per task</span><span class="card__body">Small scope, clear intent. A branch that does two things merges twice as slowly.</span></li>
+          <li class="card"><span class="label soft">03</span><span class="card__title">Test before handoff</span><span class="card__body">Run the local checks and fix what they find before asking anyone to review.</span></li>
+          <li class="card"><span class="label soft">04</span><span class="card__title">Merge verified diffs only</span><span class="card__body">Only changes that passed review and checks enter the queue. The queue is linear on purpose.</span></li>
+        </ol>
+
+        <div class="panel panel--mint warning" data-reveal>
+          <p class="headline warning__line">Parallelism without isolation creates rework.</p>
+          <p>Collapsed workspaces, conflicting edits, and untested changes slow everyone down.</p>
+        </div>
+        <div class="bar" data-reveal><span class="headline">More agents only help when the work is isolated.</span></div>
+      </section>
       <!-- /region:worktree-method -->
       <!-- region:proof-contract -->
       <section id="proof-contract" class="region chapter" aria-labelledby="h-proof-contract"><h2 id="h-proof-contract" class="headline">03 · The Proof Contract</h2></section>

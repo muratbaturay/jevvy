@@ -176,3 +176,33 @@
   .flow-list li.is-visited { opacity: 1; }
   .flow-list li.is-at { opacity: 1; box-shadow: var(--shadow-sticker); }
 }
+
+/* ---------- Worktree ---------- */
+.worktree { gap: var(--sp-lg); }
+.worktree__columns { display: grid; gap: var(--sp-md); grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+.wt { display: grid; gap: var(--sp-sm); border: 1px solid var(--ink); border-radius: var(--radius-md); padding: var(--sp-md); }
+.wt--mint { background: var(--mint); } .wt--marker { background: var(--marker); }
+.wt__name { font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; }
+.wt__files { font-size: var(--fs-body); }
+.wt__files span { display: inline-block; margin-right: 6px; }
+.wt__files .is-shared { color: var(--signal); font-weight: 700; text-decoration: underline; }
+.wt__track { height: 10px; border: 1px solid var(--ink); border-radius: 999px; background: var(--card); overflow: hidden; }
+.wt__fill { height: 100%; width: 0; background: var(--ink); transition: width 0ms linear; }
+.wt__status { display: flex; justify-content: space-between; align-items: center; min-height: 28px; font-size: var(--fs-label); font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; }
+.wt.is-collided { outline: 2px solid var(--signal); outline-offset: 2px; }
+.wt__badge { color: var(--signal); }
+.worktree__queue { display: grid; gap: var(--sp-md); }
+.worktree__merged { display: flex; flex-wrap: wrap; gap: var(--sp-sm); min-height: 28px; }
+.worktree__merged li { padding: 4px 8px; border: 1px solid var(--ink); border-radius: var(--radius-sm); background: var(--card); }
+.worktree__release { position: relative; }
+.worktree__release .stamp { --stamp-color: var(--card); --tilt: -3deg; mix-blend-mode: normal; }
+.worktree__controls { grid-template-columns: 1fr; }
+.worktree__toggle { display: flex; gap: var(--sp-sm); align-items: center; min-height: 44px; }
+.worktree__toggle input { width: 20px; height: 20px; accent-color: var(--ink); }
+.worktree__log { display: grid; gap: 2px; color: var(--ink-soft); }
+@media (min-width: 700px) { .worktree__queue { grid-template-columns: 2fr 1fr; } .worktree__controls { grid-template-columns: auto 1fr auto; } }
+
+.rules { display: grid; gap: var(--sp-md); grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+.rules .card { display: grid; gap: var(--sp-xs); }
+.warning { display: grid; gap: var(--sp-sm); }
+.warning__line { font-size: clamp(1.25rem, 2.6vw, 2rem); }
