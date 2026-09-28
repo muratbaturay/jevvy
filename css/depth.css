@@ -55,3 +55,25 @@
   .ledger-table td::before { content: attr(data-col) ": "; color: var(--ink-soft); }
 }
 @media (prefers-reduced-motion: reduce) { .depth__panel { transition: none; } }
+
+/* ---------- Ledger ---------- */
+.depth__part--ledger { max-width: min(100%, 960px); }
+[data-ledger] { display: grid; gap: var(--sp-lg); font-family: var(--font-mono); font-size: var(--fs-body); max-width: none; }
+.ledger__form { display: grid; gap: var(--sp-md); border: 1px solid var(--ink); border-radius: var(--radius-md); padding: var(--sp-lg); background: var(--card); }
+.ledger__inputs { display: grid; gap: var(--sp-md); grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
+.ledger__input { display: grid; gap: var(--sp-xs); }
+.ledger__input input { width: 100%; padding: 8px 10px; border: 1px solid var(--ink); border-radius: var(--radius-sm); background: var(--card); }
+.ledger__input input[aria-invalid="true"] { border-color: var(--signal); }
+.ledger__prov { font-size: var(--fs-label); text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-soft); }
+.ledger__prov--estimate::before { content: "≈ "; }
+.ledger__error { color: var(--signal); }
+.ledger__sides { display: grid; gap: var(--sp-md); }
+.ledger__side { border: 1px solid var(--ink); border-radius: var(--radius-md); padding: var(--sp-lg); background: var(--card); box-shadow: var(--shadow-sticker); }
+.ledger__side h4 { margin-bottom: var(--sp-md); font-family: var(--font-mono); text-transform: uppercase; font-size: var(--fs-label); letter-spacing: 0.08em; }
+.ledger__side dl, .ledger__totals { display: grid; gap: var(--sp-xs); }
+.ledger__side dl div, .ledger__totals div { display: flex; justify-content: space-between; gap: var(--sp-md); padding: 6px 0; border-top: 1px dashed var(--rule); }
+.ledger__side dd, .ledger__totals dd { margin: 0; font-weight: 700; font-variant-numeric: tabular-nums; }
+.ledger__row--total dt, .ledger__row--total dd { color: var(--teal); }
+.ledger__totals { border: 1px solid var(--ink); border-radius: var(--radius-md); padding: var(--sp-md) var(--sp-lg); background: var(--mint); }
+.ledger__note { font-size: var(--fs-body); }
+@media (min-width: 700px) { .ledger__sides { grid-template-columns: 1fr 1fr; } }

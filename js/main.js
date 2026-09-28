@@ -5,5 +5,6 @@ import './reveal.js';
 import './nav.js';
 import './depth.js';
 import './router-demo.js';
+import './ledger.js';
 
 document.addEventListener('DOMContentLoaded', () => initAll());
