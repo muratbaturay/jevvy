@@ -6,9 +6,10 @@
   <title>Jevvy · The Jev + Claude Code Field Guide</title>
   <meta name="description" content="A field guide to splitting judgment from execution in Claude Code agents, with Jev answering the bounded questions. Adapted, interactive, fact-checked.">
   <meta name="color-scheme" content="light">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400&display=swap" rel="stylesheet">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Crect width=%2764%27 height=%2764%27 rx=%278%27 fill=%27%23f6d63a%27/%3E%3Ctext x=%2732%27 y=%2746%27 font-family=%27Impact,Arial Narrow,sans-serif%27 font-size=%2744%27 text-anchor=%27middle%27 fill=%27%23231f1c%27%3EJ%3C/text%3E%3C/svg%3E">
+  <link rel="preload" href="fonts/anton-400.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="fonts/courier-prime-400.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="css/fonts.css">
   <link rel="stylesheet" href="css/tokens.css">
   <link rel="stylesheet" href="css/base.css">
   <link rel="stylesheet" href="css/guide.css">
@@ -168,7 +169,7 @@
               <h3>Two jobs, one tool</h3>
               <p>Every agent you build with Claude Code does two different jobs with the same model. The first is generation: write the function, draft the reply, summarise the thread. The output space is unbounded, so it needs a language model. The second is decision: did the tests pass, should this merge, is this ticket urgent. The output space is bounded and typed. Yes or no. One of five. A number between 0 and 1.</p>
               <p>Today both jobs go through the generative model. Ask Claude whether a diff passes review and it writes a paragraph that happens to end in a verdict. You pay generation prices and generation latency for what is structurally a classification.</p>
-              <p>Jev, from TypeSafe AI, was built for the second job only. You hand it state (a diff, a log, a transcript) and a list of typed questions. It returns an answer to each, with a calibrated probability, in one round trip. It generates nothing. TypeSafe calls the training method RLCD, reinforcement learning for calibrated decisions: the objective is to be right and to know how sure to be, rather than to sound right.</p>
+              <p>Jev, from TypeSafe AI, was built for the second job only. You hand it state (a diff, a test log, a support transcript) and a list of typed questions. It returns an answer to each, with a calibrated probability, in one round trip. It generates nothing. TypeSafe calls the training method RLCD, reinforcement learning for calibrated decisions: the objective is correctness plus an honest estimate of certainty, rather than fluent-sounding text.</p>
               <dl class="figures">
                 <div><dt>Latency per call</dt><dd>70 to 500 ms, against 3 to 329 s for chat models reasoning their way to the same classification</dd></div>
                 <div><dt>Price</dt><dd>$0.042 per million input tokens; output tokens free, because there are none</dd></div>
@@ -209,7 +210,7 @@ questions:
   if answer.probability &gt;= threshold[question.id]:
       return answer.value
   return claude.decide(context)      # fall back below threshold</pre>
-              <p>The fallback line matters more than it looks. Part 07 is about it.</p>
+              <p>That last line does more work than it appears to. Part 07 explains why.</p>
             </article>
 
             <article class="depth__part" id="deeper-04">
@@ -228,13 +229,13 @@ questions:
                   <tr class="ledger-table__total"><th scope="row">Decision overhead per PR</th><td data-col="Before">~1,550 tokens, ~13 s</td><td data-col="After">~0.8 s, input tokens only</td></tr>
                 </tbody>
               </table>
-              <p>The review and the fix stayed on Claude. Only the classification weight moved. On a team pushing 40 to 60 PRs a day through a loop like this, that is the difference between an agent that feels slow in CI and one that answers before you have switched tabs.</p>
+              <p>Claude still wrote the review and the fix. What moved was only the classification work. On a team pushing 40 to 60 PRs a day through a loop like this, that is the difference between an agent that feels slow in CI and one that answers before you have switched tabs.</p>
             </article>
 
             <article class="depth__part" id="deeper-05">
               <p class="label depth__num">Part 05</p>
               <h3>Where the ceiling is real</h3>
-              <p>The top of the range shows up in one narrow band: high frequency, low ambiguity, tightly bounded decisions, run at volume.</p>
+              <p>The top of the range shows up in one narrow band: questions asked thousands of times a day, with little ambiguity, a tight answer space, and volume to spare.</p>
               <ul class="bands">
                 <li><strong>Triage queues.</strong> Urgent, standard, or spam, thousands of times a day.</li>
                 <li><strong>CI gating.</strong> Pass, fail, or flaky, on every commit across a large repository.</li>
@@ -247,11 +248,11 @@ questions:
             <article class="depth__part" id="deeper-06">
               <p class="label depth__num">Part 06</p>
               <h3>Where forcing it backfires</h3>
-              <p>Jev cannot hallucinate free text, because it never writes any. It can absolutely pick the wrong option inside a valid schema. If your categories overlap or your context is thin, it still returns a confident, clean-looking answer, because that is what it is built to do. A broken schema does not raise an error. It produces a wrong answer that looks exactly like a right one.</p>
-              <p>The source article's author learned this on a content pipeline: four categories along the lines of "high priority", "urgent", "needs review", and "flag" that were not mutually exclusive. The answers were fast, cheap, confident, and internally inconsistent about a third of the time. Fixing the schema cost about six hours of relabelling.</p>
+              <p>Jev has no free text to hallucinate, since it writes none. What it can do is pick the wrong option from a perfectly valid schema. If your categories overlap or your context is thin, it still returns a confident, clean-looking answer, because that is what it is built to do. A broken schema never throws. What comes back is a wrong answer dressed identically to a right one.</p>
+              <p>The source article's author learned this on a content pipeline: four categories along the lines of "high priority", "urgent", "needs review", and "flag" that were not mutually exclusive. The answers came back fast, cheap, and confident, and roughly one in three contradicted another. Fixing the schema cost about six hours of relabelling.</p>
               <p>Do not route these to a classifier:</p>
               <ul class="bands">
-                <li><strong>Judgment calls.</strong> Is this writing good, is this argument persuasive. No fixed schema captures it.</li>
+                <li><strong>Judgment calls.</strong> Whether a piece of writing is good, or an argument convincing. No fixed schema holds that.</li>
                 <li><strong>Low-volume, high-stakes decisions.</strong> Five times a month does not repay the setup.</li>
                 <li><strong>Anything generative.</strong> A classifier bent into a writer is a worse writer.</li>
                 <li><strong>Schemas still changing weekly.</strong> Categories you are still discovering are not ready to offload.</li>
@@ -262,8 +263,8 @@ questions:
               <p class="label depth__num">Part 07</p>
               <h3>Verification when the failure looks clean</h3>
               <p>Because the failure mode is a confident wrong answer rather than an obvious one, the verification layer cannot rely on the output looking wrong. Two mechanisms do the work.</p>
-              <p><strong>A threshold per decision type, not one global number.</strong> A merge-or-flag decision and a spam-or-not decision have different acceptable error rates. Set each threshold by measuring disagreement against Claude on a sample, not by picking a round number. The source article uses 0.87 as an example for one decision; it is an example, not a rule.</p>
-              <p><strong>A shadow check on high-stakes decisions.</strong> Even above threshold, send a small share (the article uses 5%) through Claude in parallel, logged rather than blocking, and record disagreements. That is how schema drift shows up as a log line instead of a downstream failure.</p>
+              <p><strong>A threshold per decision type, not one global number.</strong> A merge-or-flag decision and a spam-or-not decision have different acceptable error rates. Set each threshold by measuring how often it disagrees with Claude on a sample, rather than picking a round number. The source article uses 0.87 as an example for one decision; it is an example, not a rule.</p>
+              <p><strong>A shadow sample where the stakes are high.</strong> Even when the probability clears the bar, send a small share (the article uses 5%) through Claude in parallel, logged rather than blocking, and record disagreements. That is how schema drift shows up as a log line instead of a downstream failure.</p>
               <pre class="code" aria-label="Illustrative tuned router"><span class="code__tag">illustrative</span>decide(question, context):
   answer = jev.ask(context, question.schema)
   if answer.probability &lt; threshold[question.id]:
@@ -278,7 +279,7 @@ questions:
             <article class="depth__part depth__part--ledger" id="deeper-08">
               <p class="label depth__num">Part 08</p>
               <h3>The cost ledger</h3>
-              <p>The saving is not the whole bill. It is the classification tax you were paying without knowing it was separable. Start from the article's assumptions, then type in your own numbers.</p>
+              <p>The saving is not the whole bill. It is the classification overhead you were paying without realising it could be split off. Start from the article's assumptions, then type in your own numbers.</p>
               <div data-ledger></div>
             </article>
 
@@ -287,9 +288,9 @@ questions:
               <h3>Five mistakes, and the actual skill</h3>
               <ol class="mistakes">
                 <li><strong>Routing generation to a classifier because it is cheap.</strong> It will answer. The answer will be bad.</li>
-                <li><strong>One global threshold.</strong> A misrouted ticket and a merged bad PR are not the same risk.</li>
+                <li><strong>One global threshold.</strong> Misrouting a support ticket and merging a broken PR carry very different costs, so they cannot share a bar.</li>
                 <li><strong>Skipping the schema audit.</strong> Overlapping categories do not error; they drift.</li>
-                <li><strong>Never sampling for drift.</strong> Sure and correct diverge as inputs shift. Without a shadow check, you find out from a failure.</li>
+                <li><strong>Never sampling for drift.</strong> Sure and correct diverge as inputs shift. Skip the shadow sample and the first sign is a downstream failure instead of a log line.</li>
                 <li><strong>Treating 200x as a target.</strong> It describes one band of work. Bending your architecture toward the number means bending it away from your problem.</li>
               </ol>
               <p>None of this makes Jev smarter than Claude Code, and none of it replaces Claude Code. The skill is decomposition: look at a loop you already built and ask, honestly, which parts generate and which parts are classification in a generation costume. The teams getting real multipliers did the audit first and moved only that.</p>
