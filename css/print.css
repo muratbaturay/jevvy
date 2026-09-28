@@ -1,1 +1,11 @@
-/* Print stylesheet, filled in Task 12. */
+/* Print: open the depth layer, drop motion and chrome. */
+body::before, .margin, .skip-link, .demo__controls, .worktree__controls, .proof__buttons, [data-reset], [data-close-depth], [data-open-depth] { display: none !important; }
+.page { display: block; }
+[data-reveal] { opacity: 1 !important; transform: none !important; }
+.depth__panel { grid-template-rows: 1fr !important; }
+.depth__inner { overflow: visible !important; padding-block: 2rem !important; }
+.depth__inner[inert] { visibility: visible; }
+.card, .panel, .bar { box-shadow: none; break-inside: avoid; }
+.bar, .gate { background: transparent !important; color: var(--ink) !important; border: 1px solid var(--ink); }
+.bar .headline, .gate * { color: var(--ink) !important; }
+a[href^="http"]::after { content: " (" attr(href) ")"; font-size: 0.8em; color: var(--ink-soft); }

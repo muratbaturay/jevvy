@@ -241,3 +241,23 @@
 .verifier__prompt p:last-child { font-weight: 700; }
 .verifier__warn { display: grid; gap: var(--sp-sm); }
 @media (min-width: 900px) { .verifier { grid-template-columns: 1fr 1fr; } }
+
+/* ---------- Receipt ---------- */
+.receipt { display: grid; justify-items: center; }
+.receipt__paper {
+  width: min(100%, 420px); background: var(--card); color: var(--ink);
+  padding: var(--sp-xl) var(--sp-lg) var(--sp-2xl); font-size: var(--fs-receipt); line-height: 1.45;
+  border: 1px solid var(--ink); border-top: 0; position: relative;
+  /* perforated top edge */
+  --tooth: 12px;
+  clip-path: polygon(0 var(--tooth), 4% 0, 8% var(--tooth), 12% 0, 16% var(--tooth), 20% 0, 24% var(--tooth), 28% 0, 32% var(--tooth), 36% 0, 40% var(--tooth), 44% 0, 48% var(--tooth), 52% 0, 56% var(--tooth), 60% 0, 64% var(--tooth), 68% 0, 72% var(--tooth), 76% 0, 80% var(--tooth), 84% 0, 88% var(--tooth), 92% 0, 96% var(--tooth), 100% 0, 100% 100%, 0 100%);
+  padding-top: calc(var(--sp-xl) + var(--tooth));
+  text-align: center;
+}
+.receipt__title { font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; font-size: var(--fs-body); padding-bottom: var(--sp-md); border-bottom: 1px dashed var(--ink); }
+.receipt__lines { display: grid; gap: var(--sp-md); text-align: left; padding-block: var(--sp-md); }
+.receipt__lines div { display: grid; grid-template-columns: 7em 1fr; gap: var(--sp-sm); }
+.receipt__lines dt { font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; font-size: var(--fs-label); }
+.receipt__lines dd { margin: 0; }
+.receipt__foot { padding-top: var(--sp-md); border-top: 1px dashed var(--ink); color: var(--ink-soft); }
+@media (max-width: 400px) { .receipt__lines div { grid-template-columns: 1fr; } }

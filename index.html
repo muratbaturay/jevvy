@@ -405,7 +405,27 @@ questions:
       </section>
       <!-- /region:proof-contract -->
       <!-- region:receipt -->
-      <footer id="receipt" class="region receipt"><h2 class="label">Receipt</h2></footer>
+      <footer id="receipt" class="region receipt" aria-labelledby="h-receipt">
+        <div class="receipt__paper" data-reveal>
+          <h2 id="h-receipt" class="receipt__title">Jevvy · field guide receipt</h2>
+          <dl class="receipt__lines">
+            <div><dt>Artifact</dt><dd>This page. One HTML file, no build step.</dd></div>
+            <div><dt>Diff</dt><dd>Adapted from the <a href="https://x.com/cyrilxbt" rel="noopener">Agent Field Guide by @cyrilxbt</a>, three pages, and the source article "The Jev + Claude Code Stack" (<span data-article-link>link pending</span>, author unnamed). Rewritten, restructured, and corrected: Jev's role, ranges instead of headline multipliers, anecdotes attributed.</dd></div>
+            <div><dt>Tests</dt><dd>Unit tests for the ledger math, the router, the verifier, and the merge timeline. Lighthouse: accessibility 100, performance 95 or better. Checked at three widths, with reduced motion on and off.</dd></div>
+            <div><dt>Limits</dt><dd>Speed and cost figures are TypeSafe's own internal evaluations, not independently verified. Jev access is waitlist-only as of September 2026. Ledger defaults are the article's assumptions; edit them.</dd></div>
+            <div><dt>Receipt</dt><dd><a href="https://github.com/muratbaturay/jevvy" rel="noopener">github.com/muratbaturay/jevvy</a><br>Printed: <time data-printed datetime="2026-09-28">28 September 2026</time></dd></div>
+            <div><dt>Sources</dt><dd>
+              <a href="https://typesafe.ai/blog/introducing-system-one-models-and-jev" rel="noopener">TypeSafe AI blog</a> ·
+              <a href="https://www.latent.space/p/jev" rel="noopener">Latent Space</a> ·
+              <a href="https://www.oreilly.com/radar/will-typesafes-jev-change-how-we-build-ai-applications/" rel="noopener">O'Reilly Radar</a> ·
+              <a href="https://www.datacamp.com/blog/system-one-models-jev" rel="noopener">DataCamp</a> ·
+              <a href="https://www.firecrawl.dev/blog/what-is-jev" rel="noopener">Firecrawl</a> ·
+              <a href="https://www.mindstudio.ai/blog/typesafe-jev-rlcd-vs-rlhf" rel="noopener">MindStudio</a>
+            </dd></div>
+          </dl>
+          <p class="receipt__foot">Built by Murat Baturay. Not affiliated with TypeSafe AI or Anthropic.</p>
+        </div>
+      </footer>
       <!-- /region:receipt -->
     </main>
   </div>
