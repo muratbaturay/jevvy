@@ -3,5 +3,6 @@
 import { initAll } from './registry.js';
 import './reveal.js';
 import './nav.js';
+import './router-demo.js';
 
 document.addEventListener('DOMContentLoaded', () => initAll());

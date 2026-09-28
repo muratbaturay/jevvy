@@ -107,3 +107,72 @@
   .hero__running, .hero__chips { grid-column: 1 / -1; }
   .hero__credit { grid-column: 2; grid-row: 2 / 4; align-self: center; --tilt: 2deg; }
 }
+
+/* ---------- Chapters ---------- */
+.chapter { display: grid; gap: var(--sp-lg); }
+.chapter__bar { margin-bottom: var(--sp-sm); }
+.chapter__sub { font-size: 1.05rem; max-width: 60ch; }
+.chapter__h3 { color: var(--ink-soft); margin-top: var(--sp-md); }
+.chapter__deeper { justify-self: start; display: grid; gap: var(--sp-md); }
+
+.layers { display: grid; gap: var(--sp-md); }
+.layer__cards { display: grid; gap: var(--sp-sm); }
+.gate { background: var(--ink); color: var(--card); border-radius: var(--radius-md); padding: var(--sp-lg); display: grid; gap: var(--sp-md); align-content: center; text-align: center; }
+.gate__title { font-size: var(--fs-headline); }
+.gate__rules { display: grid; gap: var(--sp-sm); opacity: 0.9; }
+@media (min-width: 1100px) { .layers { grid-template-columns: 1fr 160px 1fr; } }
+
+.rule-strip { border: 1px solid var(--ink); border-radius: var(--radius-md); padding: var(--sp-lg); background: var(--card); display: grid; gap: var(--sp-md); }
+.rule-strip__line { font-size: clamp(1.25rem, 2.6vw, 2rem); }
+.rule-strip__labels { display: grid; gap: var(--sp-sm); color: var(--ink-soft); }
+@media (min-width: 700px) { .rule-strip__labels { grid-template-columns: repeat(3, 1fr); } }
+
+/* ---------- Demo frame ---------- */
+.demo { display: grid; gap: var(--sp-md); border: 1px solid var(--ink); border-radius: var(--radius-md); padding: var(--sp-lg); background: var(--card); box-shadow: var(--shadow-sticker); }
+.demo__controls { display: grid; gap: var(--sp-md); align-items: end; }
+.demo__field { display: grid; gap: var(--sp-sm); border: 0; padding: 0; margin: 0; min-width: 0; }
+.demo__radios { display: grid; gap: var(--sp-xs); }
+.demo__radios label { display: flex; gap: var(--sp-sm); align-items: center; min-height: 32px; }
+.demo input[type="range"] { width: 100%; accent-color: var(--ink); }
+.demo input[type="number"] { width: 100%; padding: 8px 10px; border: 1px solid var(--ink); border-radius: var(--radius-sm); background: var(--card); }
+.demo select { padding: 8px 10px; border: 1px solid var(--ink); border-radius: var(--radius-sm); background: var(--card); }
+@media (min-width: 700px) { .demo__controls { grid-template-columns: 1fr 1fr auto; } }
+
+/* ---------- Router flow ---------- */
+.flow { width: 100%; color: var(--ink); }
+.flow rect { fill: var(--card); stroke: var(--ink); stroke-width: 2; }
+.flow text { fill: var(--ink); font-family: var(--font-mono); font-size: 14px; text-anchor: middle; }
+.flow .flow__small { font-size: 11px; fill: var(--ink-soft); }
+.flow [data-station="jev"] rect { fill: var(--mint); }
+.flow [data-station="claude"] rect { fill: var(--marker); }
+.flow [data-station="gate"] rect { fill: var(--ink); }
+.flow [data-station="gate"] text { fill: var(--card); }
+.flow [data-station="gate"].is-allowed rect { fill: var(--mint); }
+.flow [data-station="gate"].is-allowed text, .flow [data-station="gate"].is-fallback text { fill: var(--ink); }
+.flow [data-station="gate"].is-fallback rect { fill: var(--marker); }
+.flow [data-station].is-dim { opacity: 0.35; }
+.flow [data-line] { stroke-dasharray: 400; stroke-dashoffset: 400; }
+/* Dashed lines reveal by opacity, not by dash offset, so they keep their dashes. */
+.flow [data-line="skip"], .flow [data-line^="detour"] { stroke-dasharray: 6 6; stroke-dashoffset: 0; opacity: 0; }
+.flow [data-line].is-drawn { stroke-dashoffset: 0; opacity: 1; transition: stroke-dashoffset var(--dur-slow) var(--ease), opacity var(--dur-fast); }
+.flow__token { fill: var(--ink); transition: cx var(--dur-slow) var(--ease), cy var(--dur-slow) var(--ease), opacity var(--dur-fast); }
+@media (prefers-reduced-motion: reduce) { .flow [data-line], .flow__token { transition: none; } .flow [data-line] { stroke-dashoffset: 0; } }
+
+/* Narrow widths: the SVG flow is illegible, so a vertical list mirrors its state. */
+.flow-list { display: none; }
+@media (max-width: 699px) {
+  .flow { display: none; }
+  .flow-list { display: grid; gap: var(--sp-xs); counter-reset: st; }
+  .flow-list li { padding: 8px 10px; border: 1px solid var(--ink); border-radius: var(--radius-sm); background: var(--card); font-size: var(--fs-body); opacity: 0.55; transition: opacity var(--dur-fast) var(--ease); }
+  .flow-list__sub { display: block; font-size: var(--fs-label); color: var(--ink-soft); }
+  .flow-list li[data-station="jev"] { background: var(--mint); }
+  .flow-list li[data-station="claude"] { background: var(--marker); }
+  .flow-list li[data-station="gate"] { background: var(--ink); color: var(--card); }
+  .flow-list li[data-station="reason"] { display: none; border-style: dashed; }
+  .demo.is-path-fallback .flow-list li[data-station="reason"] { display: block; }
+  .demo.is-jev-dim .flow-list li[data-station="jev"] { opacity: 0.25; }
+  .demo.is-gate-allowed .flow-list li[data-station="gate"] { background: var(--mint); color: var(--ink); }
+  .demo.is-gate-fallback .flow-list li[data-station="gate"] { background: var(--marker); color: var(--ink); }
+  .flow-list li.is-visited { opacity: 1; }
+  .flow-list li.is-at { opacity: 1; box-shadow: var(--shadow-sticker); }
+}

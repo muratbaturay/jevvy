@@ -51,7 +51,107 @@
       </header>
       <!-- /region:top -->
       <!-- region:control-plane -->
-      <section id="control-plane" class="region chapter" aria-labelledby="h-control-plane"><h2 id="h-control-plane" class="headline">01 · The Control Plane</h2></section>
+      <section id="control-plane" class="region chapter" aria-labelledby="h-control-plane">
+        <div class="bar chapter__bar" data-reveal>
+          <h2 id="h-control-plane" class="headline">01 · The Control Plane</h2>
+          <span class="bar__note">Separate judgment from execution</span>
+        </div>
+        <p class="chapter__sub" data-reveal style="--i:1">One loop, two jobs. Decide cheap. Generate when it counts.</p>
+
+        <h3 class="label chapter__h3" data-reveal>Two layers, one gate</h3>
+        <div class="layers" data-reveal style="--i:1">
+          <div class="panel panel--mint layer">
+            <p class="panel__title">Decision layer · Jev</p>
+            <ul class="layer__cards">
+              <li class="card"><span class="card__title">Answers bounded questions</span><span class="card__body">Yes or no. One of five. A score from 0 to 1. Questions with an answer space you wrote down in advance.</span></li>
+              <li class="card"><span class="card__title">Returns a typed answer with a probability</span><span class="card__body">Not a paragraph that happens to contain a verdict. A value your code can branch on, and a number saying how sure.</span></li>
+              <li class="card"><span class="card__title">Flags low confidence</span><span class="card__body">Under your threshold it says so instead of bluffing. That is what calibration is for.</span></li>
+              <li class="card"><span class="card__title">Never writes text</span><span class="card__body">No prose, no summaries, no explanations. If the job is to write, it is not this layer's job.</span></li>
+            </ul>
+          </div>
+          <div class="gate" role="group" aria-label="Policy gate">
+            <p class="gate__title headline">Policy<br>gate</p>
+            <ul class="gate__rules label">
+              <li>Threshold per decision type</li>
+              <li>Allowed tools and scope</li>
+              <li>Below threshold: fall back to Claude</li>
+            </ul>
+          </div>
+          <div class="panel panel--marker layer">
+            <p class="panel__title">Execution layer · Claude Code</p>
+            <ul class="layer__cards">
+              <li class="card"><span class="card__title">Reads the repository</span><span class="card__body">Finds the files, understands the code, builds the context the decision was made from.</span></li>
+              <li class="card"><span class="card__title">Generates the review, the fix, the doc</span><span class="card__body">Unbounded output is what a language model is for. This part never moves.</span></li>
+              <li class="card"><span class="card__title">Runs tools and tests</span><span class="card__body">Executes commands, linters, and test suites, and captures what came back.</span></li>
+              <li class="card"><span class="card__title">Returns the changed artifact</span><span class="card__body">A diff, an updated file, a report. Something a verifier can inspect.</span></li>
+            </ul>
+          </div>
+        </div>
+
+        <h3 class="label chapter__h3" data-reveal>From request to verified result</h3>
+        <figure class="demo" data-demo="router" data-reveal style="--i:1">
+          <svg class="flow" viewBox="0 0 1000 220" role="img" aria-labelledby="flow-title flow-desc">
+            <title id="flow-title">Request flow through Jev, the policy gate, and Claude Code</title>
+            <desc id="flow-desc">Five stations left to right: goal and evidence, Jev answers, policy gate, Claude Code acts, result verified. Below the gate, a detour to Claude reasoning for low-confidence answers.</desc>
+            <g class="flow__rest" fill="none" stroke="currentColor" stroke-width="2" stroke-dasharray="3 5" opacity="0.3">
+              <path d="M180 70 H260"/><path d="M420 70 H500"/><path d="M600 70 H680"/><path d="M840 70 H920"/>
+            </g>
+            <g class="flow__lines" fill="none" stroke="currentColor" stroke-width="2">
+              <path data-line="s1" d="M180 70 H260"/>
+              <path data-line="s2" d="M420 70 H500"/>
+              <path data-line="s3" d="M600 70 H680"/>
+              <path data-line="s4" d="M840 70 H920"/>
+              <path data-line="skip" d="M180 70 C 300 20, 380 20, 500 70" stroke-dasharray="6 6" opacity="0.5"/>
+              <path data-line="detour1" d="M550 100 V150 H435" stroke-dasharray="6 6"/>
+              <path data-line="detour2" d="M435 150 H760 V100" stroke-dasharray="6 6"/>
+            </g>
+            <g class="flow__stations">
+              <g data-station="goal"><rect x="20" y="40" width="160" height="60" rx="6"/><text x="100" y="66">Goal + evidence</text><text x="100" y="86" class="flow__small">goal, context, evidence</text></g>
+              <g data-station="jev"><rect x="260" y="40" width="160" height="60" rx="6"/><text x="340" y="66">Jev answers</text><text x="340" y="86" class="flow__small" data-answer-chip>typed + probability</text></g>
+              <g data-station="gate"><rect x="500" y="40" width="100" height="60" rx="6"/><text x="550" y="66">Policy</text><text x="550" y="86">gate</text></g>
+              <g data-station="claude"><rect x="680" y="40" width="160" height="60" rx="6"/><text x="760" y="66">Claude Code acts</text><text x="760" y="86" class="flow__small">reads, edits, runs</text></g>
+              <g data-station="verified"><rect x="920" y="40" width="60" height="60" rx="6"/><text x="950" y="75">✓</text></g>
+              <g data-station="reason"><rect x="285" y="130" width="150" height="40" rx="6"/><text x="360" y="155">Claude reasons</text></g>
+            </g>
+            <circle class="flow__token" data-token r="8" cx="180" cy="70"/>
+          </svg>
+          <ol class="flow-list" aria-hidden="true">
+            <li data-station="goal">Goal + evidence</li>
+            <li data-station="jev">Jev answers <span class="flow-list__sub" data-answer-chip>typed + probability</span></li>
+            <li data-station="gate">Policy gate</li>
+            <li data-station="reason">Claude reasons it out</li>
+            <li data-station="claude">Claude Code acts</li>
+            <li data-station="verified">Result verified ✓</li>
+          </ol>
+          <form class="demo__controls" data-controls>
+            <fieldset class="demo__field">
+              <legend class="label">Pick a question</legend>
+              <ul class="demo__radios" data-questions></ul>
+            </fieldset>
+            <div class="demo__field">
+              <label class="label" for="router-threshold">Confidence threshold <output data-threshold-out for="router-threshold">0.87</output></label>
+              <input id="router-threshold" type="range" min="0.5" max="0.99" step="0.01" value="0.87" data-threshold>
+              <p class="soft" data-threshold-note hidden>Not used: judgment calls skip Jev.</p>
+            </div>
+            <button type="submit" class="btn">Run</button>
+          </form>
+          <figcaption class="narration" data-narration aria-live="polite">Pick a question and press Run.</figcaption>
+        </figure>
+
+        <div class="rule-strip" data-reveal>
+          <p class="headline rule-strip__line">The classifier answers. The gate authorizes. The tool executes.</p>
+          <ul class="rule-strip__labels label">
+            <li>Jev answers what you asked</li>
+            <li>The gate decides what's allowed</li>
+            <li>Claude Code does it within bounds</li>
+          </ul>
+        </div>
+
+        <aside class="sticky chapter__deeper" data-reveal style="--tilt:-1deg">
+          <p>Why this split is worth 20 to 200x on the right loop, and nothing on the wrong one.</p>
+          <button type="button" class="btn" data-open-depth aria-controls="go-deeper" aria-expanded="false">Go deeper</button>
+        </aside>
+      </section>
       <!-- /region:control-plane -->
       <!-- region:go-deeper -->
       <section id="go-deeper" class="region depth" aria-labelledby="h-go-deeper"><h2 id="h-go-deeper" class="headline">Go deeper</h2></section>
