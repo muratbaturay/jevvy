@@ -7,5 +7,6 @@ import './depth.js';
 import './router-demo.js';
 import './ledger.js';
 import './worktree-demo.js';
+import './proof-demo.js';
 
 document.addEventListener('DOMContentLoaded', () => initAll());

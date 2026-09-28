@@ -344,7 +344,65 @@ questions:
       </section>
       <!-- /region:worktree-method -->
       <!-- region:proof-contract -->
-      <section id="proof-contract" class="region chapter" aria-labelledby="h-proof-contract"><h2 id="h-proof-contract" class="headline">03 · The Proof Contract</h2></section>
+      <section id="proof-contract" class="region chapter" aria-labelledby="h-proof-contract">
+        <div class="bar bar--teal chapter__bar" data-reveal>
+          <h2 id="h-proof-contract" class="headline">03 · The Proof Contract</h2>
+          <span class="bar__note">No evidence, no done</span>
+        </div>
+        <p class="chapter__sub" data-reveal style="--i:1">Done is a claim. Evidence is what makes it true.</p>
+
+        <h3 class="label chapter__h3" data-reveal>Every task returns five things</h3>
+        <div class="five" data-reveal style="--i:1">
+          <ol class="five__list">
+            <li class="five__row"><span class="five__num five__num--mint">01</span><span class="card"><span class="card__title">Artifact</span><span class="card__body">The concrete output: the file, the answer, the change.</span></span></li>
+            <li class="five__row"><span class="five__num five__num--marker">02</span><span class="card"><span class="card__title">Diff</span><span class="card__body">Exactly what changed: additions, deletions, modifications, nothing implied.</span></span></li>
+            <li class="five__row"><span class="five__num five__num--mint">03</span><span class="card"><span class="card__title">Tests</span><span class="card__body">What ran and how it went: commands, results, pass or fail.</span></span></li>
+            <li class="five__row"><span class="five__num five__num--marker">04</span><span class="card"><span class="card__title">Limits</span><span class="card__body">What was not verified: known gaps, assumptions, the untested path.</span></span></li>
+            <li class="five__row"><span class="five__num five__num--mint">05</span><span class="card"><span class="card__title">Receipt</span><span class="card__body">How to reproduce and inspect: paths, URLs, log ids, run ids.</span></span></li>
+          </ol>
+          <ul class="five__side">
+            <li class="card"><span class="card__title">Evidence makes reviewers independent</span><span class="card__body">A claim needs the claimant. Evidence lets anyone check without extra context.</span></li>
+            <li class="card"><span class="card__title">Same standard for every agent</span><span class="card__body">Five items, every time. Reviews stay fast because they stay identical.</span></li>
+            <li class="card"><span class="card__title">Missing evidence means incomplete</span><span class="card__body">If any item is missing or unclear, the task is not done. Send it back.</span></li>
+          </ul>
+        </div>
+
+        <h3 class="label chapter__h3" data-reveal>Gate the result with independent verification</h3>
+        <figure class="demo proof" data-demo="proof" data-reveal style="--i:1">
+          <div class="proof__worker card">
+            <p class="card__title">Worker says done</p>
+            <label class="label" for="proof-scenario">Scenario</label>
+            <select id="proof-scenario" data-scenario></select>
+            <div class="proof__buttons">
+              <button type="button" class="btn" data-return>Return evidence</button>
+              <button type="button" class="btn" data-verify disabled>Verify</button>
+              <button type="button" class="btn btn--ghost" data-repair hidden>Repair</button>
+            </div>
+          </div>
+          <ol class="proof__slots" data-slots aria-label="Evidence returned"></ol>
+          <div class="proof__flow">
+            <div class="proof__node" data-node="complete"><span class="label">Evidence complete?</span></div>
+            <div class="proof__node proof__node--review" data-node="review"><span class="label">Independent review</span><span class="proof__stamp" data-stamp-slot></span></div>
+            <div class="proof__node" data-node="match"><span class="label">Matches the goal?</span></div>
+            <div class="proof__node proof__node--accept bar" data-node="accept"><span class="headline">Accept + merge</span></div>
+            <div class="proof__loop panel panel--marker" data-node="repair"><span class="label">Return for repair</span></div>
+            <div class="proof__loop panel panel--marker" data-node="revise"><span class="label">Revise</span></div>
+          </div>
+          <figcaption class="narration" data-narration aria-live="polite">Pick a scenario, return the evidence, then verify.</figcaption>
+        </figure>
+
+        <div class="verifier" data-reveal>
+          <div class="card verifier__prompt">
+            <p class="label soft">The verifier prompt</p>
+            <p>Compare the artifact with the goal.<br>Check the evidence.<br>Answer VERIFIED, REFUTED, or UNKNOWN.</p>
+          </div>
+          <div class="panel panel--marker verifier__warn">
+            <p class="headline">Confidence is not proof.</p>
+            <p>A calibrated probability says how sure the classifier is, not whether it is right. That is why chapter 01's router keeps a shadow check.</p>
+          </div>
+        </div>
+        <div class="bar bar--teal" data-reveal><span class="headline">Trust the receipt, not the claim.</span></div>
+      </section>
       <!-- /region:proof-contract -->
       <!-- region:receipt -->
       <footer id="receipt" class="region receipt"><h2 class="label">Receipt</h2></footer>
