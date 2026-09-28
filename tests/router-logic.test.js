@@ -44,3 +44,13 @@ test('threshold is rounded to two decimals and clamped', () => {
   assert.equal(normalizeThreshold('x'), DEFAULT_THRESHOLD);
   assert.equal(route(q('agent'), 0.7100000001).path, 'jev');
 });
+
+// Fix pass: gate label per path (review finding I2).
+import { gateText } from '../js/router-logic.js';
+
+test('gate text names the reason the gate opened', () => {
+  assert.equal(gateText('jev'), '≥ threshold · allowed');
+  assert.equal(gateText('fallback'), 'below · fall back');
+  assert.equal(gateText('direct'), 'no threshold · allowed');
+  assert.equal(gateText('idle'), 'threshold');
+});

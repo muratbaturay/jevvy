@@ -6,6 +6,7 @@
   <title>Jevvy · The Jev + Claude Code Field Guide</title>
   <meta name="description" content="A field guide to splitting judgment from execution in Claude Code agents, with Jev answering the bounded questions. Adapted, interactive, fact-checked.">
   <meta name="color-scheme" content="light">
+  <script>document.documentElement.classList.add('js');</script>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Crect width=%2764%27 height=%2764%27 rx=%278%27 fill=%27%23f6d63a%27/%3E%3Ctext x=%2732%27 y=%2746%27 font-family=%27Impact,Arial Narrow,sans-serif%27 font-size=%2744%27 text-anchor=%27middle%27 fill=%27%23231f1c%27%3EJ%3C/text%3E%3C/svg%3E">
   <link rel="preload" href="fonts/anton-400.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="fonts/courier-prime-400.woff2" as="font" type="font/woff2" crossorigin>
@@ -32,7 +33,7 @@
       </ul>
     </nav>
     <!-- /region:nav -->
-    <main id="main" class="content">
+    <div class="content">
       <!-- region:top -->
       <header id="top" class="region hero">
         <p class="hero__running label">
@@ -51,6 +52,7 @@
         </ul>
       </header>
       <!-- /region:top -->
+      <main id="main">
       <!-- region:control-plane -->
       <section id="control-plane" class="region chapter" aria-labelledby="h-control-plane">
         <div class="bar chapter__bar" data-reveal>
@@ -116,7 +118,7 @@
             </g>
             <circle class="flow__token" data-token r="8" cx="180" cy="70"/>
           </svg>
-          <ol class="flow-list" aria-hidden="true">
+          <ol class="flow-list" aria-label="Request flow, step by step">
             <li data-station="goal">Goal + evidence</li>
             <li data-station="jev">Jev answers <span class="flow-list__sub" data-answer-chip>typed + probability</span></li>
             <li data-station="gate">Policy gate</li>
@@ -389,6 +391,7 @@ questions:
             <div class="proof__loop panel panel--marker" data-node="repair"><span class="label">Return for repair</span></div>
             <div class="proof__loop panel panel--marker" data-node="revise"><span class="label">Revise</span></div>
           </div>
+          <ol class="proof__steps" data-steps aria-label="Verifier steps"></ol>
           <figcaption class="narration" data-narration aria-live="polite">Pick a scenario, return the evidence, then verify.</figcaption>
         </figure>
 
@@ -405,6 +408,7 @@ questions:
         <div class="bar" data-reveal><span class="headline">Trust the receipt, not the claim.</span></div>
       </section>
       <!-- /region:proof-contract -->
+      </main>
       <!-- region:receipt -->
       <footer id="receipt" class="region receipt" aria-labelledby="h-receipt">
         <div class="receipt__paper" data-reveal>
@@ -412,7 +416,7 @@ questions:
           <dl class="receipt__lines">
             <div><dt>Artifact</dt><dd>This page. One HTML page, plain CSS and JS, no build step.</dd></div>
             <div><dt>Diff</dt><dd>Adapted from the <a href="https://x.com/cyrilxbt" rel="noopener">Agent Field Guide by @cyrilxbt</a>, three pages, and the source article "The Jev + Claude Code Stack" (<span data-article-link>link pending</span>, author unnamed). Rewritten, restructured, and corrected: Jev's role, ranges instead of headline multipliers, anecdotes attributed.</dd></div>
-            <div><dt>Tests</dt><dd>Unit tests for the ledger math, the router, the verifier, and the merge timeline. Lighthouse on the last local run (mobile profile): accessibility 100, best practices 100, performance 95. Checked at three widths, with reduced motion on and off.</dd></div>
+            <div><dt>Tests</dt><dd>Unit tests for the ledger math, the router, the verifier, and the merge timeline. Lighthouse on the last local run (mobile profile, idle page): accessibility 100, best practices 100, performance 95. Demo result states contrast-checked by hand. Checked at three widths, with reduced motion on and off.</dd></div>
             <div><dt>Limits</dt><dd>Speed and cost figures are TypeSafe's own internal evaluations, not independently verified. Jev access is waitlist-only as of September 2026. Ledger defaults are the article's assumptions; edit them.</dd></div>
             <div><dt>Receipt</dt><dd><a href="https://github.com/muratbaturay/jevvy" rel="noopener">github.com/muratbaturay/jevvy</a><br>Printed: <time data-printed datetime="2026-09-28">28 September 2026</time></dd></div>
             <div><dt>Sources</dt><dd>
@@ -428,7 +432,7 @@ questions:
         </div>
       </footer>
       <!-- /region:receipt -->
-    </main>
+    </div>
   </div>
 </body>
 </html>

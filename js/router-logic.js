@@ -15,6 +15,17 @@ export function normalizeThreshold(value) {
 
 const fmt = (n) => n.toFixed(2);
 
+// What the policy-gate label says for each routing outcome (and at rest).
+const GATE_TEXT = {
+  idle: 'threshold',
+  jev: '≥ threshold · allowed',
+  fallback: 'below · fall back',
+  direct: 'no threshold · allowed',
+};
+export function gateText(path) {
+  return GATE_TEXT[path] ?? GATE_TEXT.idle;
+}
+
 export function route(question, thresholdValue) {
   const threshold = normalizeThreshold(thresholdValue);
   if (question.kind === 'judgment') {

@@ -1,6 +1,6 @@
 // Cost ledger UI. All math in ledger-logic.js.
 import { register } from './registry.js';
-import { DEFAULTS, PROVENANCE, computeLedger } from './ledger-logic.js';
+import { DEFAULTS, PROVENANCE, MAX_INPUT, sanitize, computeLedger, formatMoney as money, formatPct as pct, formatSecs as secs, formatHours as hours } from './ledger-logic.js';
 
 const FIELDS = [
   ['prsPerDay', 'PRs per day', 'count'],
@@ -15,10 +15,6 @@ const FIELDS = [
 ];
 const KIND_LABEL = { article: 'from the article', derived: 'derived', estimate: 'our estimate' };
 
-const money = (n) => (Math.abs(n) >= 0.01 || n === 0 ? `$${n.toFixed(2)}` : `$${n.toFixed(4)}`);
-const pct = (n) => (n > 0 && n < 0.001 ? '<0.1%' : `${(n * 100).toFixed(0)}%`);
-const secs = (n) => `${n.toFixed(1)} s`;
-const hours = (n) => `${n.toFixed(2)} h`;
 
 export function initLedger(root) {
   root.innerHTML = `
@@ -28,9 +24,9 @@ export function initLedger(root) {
         ${FIELDS.map(([key, label, unit]) => `
           <div class="ledger__input">
             <label for="ledger-${key}">${label} <span class="soft ledger__unit">(${unit})</span></label>
-            <input id="ledger-${key}" name="${key}" type="number" inputmode="decimal" min="0" step="any" value="${DEFAULTS[key]}" aria-describedby="ledger-${key}-prov">
-            <small id="ledger-${key}-prov" class="ledger__prov ledger__prov--${PROVENANCE[key].kind}" title="${PROVENANCE[key].note}">${KIND_LABEL[PROVENANCE[key].kind]}</small>
-            <small class="ledger__error" data-error-for="${key}" hidden>Enter a number of zero or more.</small>
+            <input id="ledger-${key}" name="${key}" type="number" inputmode="decimal" min="0" max="${MAX_INPUT}" step="any" value="${DEFAULTS[key]}" aria-describedby="ledger-${key}-prov ledger-${key}-err">
+            <small id="ledger-${key}-prov" class="ledger__prov ledger__prov--${PROVENANCE[key].kind}">${KIND_LABEL[PROVENANCE[key].kind]}${key === 'claudeRatePerM' ? ' · an output-weighted assumption, not a published price' : ''}</small>
+            <small id="ledger-${key}-err" class="ledger__error" data-error-for="${key}" hidden>Enter a number between 0 and ${MAX_INPUT.toLocaleString('en-US')}.</small>
           </div>`).join('')}
       </div>
       <button type="button" class="btn btn--ghost" data-reset>Reset to article defaults</button>
@@ -58,10 +54,11 @@ export function initLedger(root) {
       const input = form.elements[key];
       const err = root.querySelector(`[data-error-for="${key}"]`);
       const raw = input.value.trim();
-      const bad = raw === '' || !Number.isFinite(Number(raw)) || Number(raw) < 0;
+      const n = Number(raw);
+      const bad = raw === '' || !Number.isFinite(n) || n < 0 || n > MAX_INPUT;
       input.setAttribute('aria-invalid', String(bad));
       err.hidden = !bad;
-      out[key] = bad ? 0 : Number(raw);
+      out[key] = bad ? 0 : sanitize(n);
     }
     return out;
   }

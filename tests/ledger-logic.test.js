@@ -56,3 +56,47 @@ test('every default has a provenance label', () => {
     assert.ok(PROVENANCE[key].note.length > 0, key);
   }
 });
+
+// Fix pass: formatting and bounds (review finding I1, M4, M5).
+import { MAX_INPUT, formatMoney, formatPct, formatSecs, formatHours } from '../js/ledger-logic.js';
+
+test('sanitize clamps absurd inputs to MAX_INPUT', () => {
+  assert.equal(sanitize(1e200), MAX_INPUT);
+  assert.equal(sanitize(MAX_INPUT + 1), MAX_INPUT);
+  assert.equal(sanitize(12), 12);
+});
+
+test('ledger stays finite even at the clamp', () => {
+  const l = computeLedger({ prsPerDay: 1e200, tokensPerDecision: 1e200, generationTokensPerPr: 1e200, claudeRatePerM: 1e200 });
+  for (const v of [...Object.values(l.before), ...Object.values(l.after), l.savingPerDay, l.hoursSavedPerDay]) assert.ok(Number.isFinite(v));
+});
+
+test('formatMoney groups thousands, keeps cents, handles tiny and negative values', () => {
+  assert.equal(formatMoney(3.9), '$3.90');
+  assert.equal(formatMoney(75000.07), '$75,000.07');
+  assert.equal(formatMoney(0.003276), '$0.0033');
+  assert.equal(formatMoney(0), '$0.00');
+  assert.equal(formatMoney(-3.9), '−$3.90');
+  assert.equal(formatMoney(5e24), '$5,000,000,000,000,000,000,000,000.00');
+});
+
+test('formatters fall back to a dash when not finite', () => {
+  assert.equal(formatMoney(Infinity), '—');
+  assert.equal(formatMoney(NaN), '—');
+  assert.equal(formatPct(NaN), '—');
+  assert.equal(formatSecs(Infinity), '—');
+  assert.equal(formatHours(-Infinity), '—');
+});
+
+test('formatPct shows one decimal below 1% and a floor below 0.1%', () => {
+  assert.equal(formatPct(0.342), '34%');
+  assert.equal(formatPct(0.004), '0.4%');
+  assert.equal(formatPct(0.0003), '<0.1%');
+  assert.equal(formatPct(0), '0%');
+});
+
+test('formatSecs and formatHours keep sign and unit', () => {
+  assert.equal(formatSecs(12.06), '12.1 s');
+  assert.equal(formatSecs(-17.16), '−17.2 s');
+  assert.equal(formatHours(0.1675), '0.17 h');
+});

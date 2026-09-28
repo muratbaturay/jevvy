@@ -42,7 +42,8 @@ export function initWorktreeDemo(root) {
     const fill = list.querySelector(`[data-col="${col}"] .wt__fill`);
     const bar = fill.parentElement;
     fill.style.transitionDuration = `${ms}ms`;
-    requestAnimationFrame(() => { fill.style.width = `${pct}%`; bar.setAttribute('aria-valuenow', String(pct)); });
+    requestAnimationFrame(() => { fill.style.width = `${pct}%`; });
+    if (ms === 0) bar.setAttribute('aria-valuenow', String(pct));
   }
   const status = (col, text) => (list.querySelector(`[data-col="${col}"] [data-status]`).textContent = text);
   function stamp(col, text, cls = '') {
@@ -65,7 +66,7 @@ export function initWorktreeDemo(root) {
         // The conflict is resolved for both sides once the reworked column resumes.
         list.querySelectorAll('.is-collided').forEach((el) => el.classList.remove('is-collided'));
         mark(e.column, 'reworked'); status(e.column, 'working again'); setFill(e.column, 100, e.remainingMs); break;
-      case 'done': status(e.column, 'done'); break;
+      case 'done': status(e.column, 'done'); list.querySelector(`[data-col="${e.column}"] .wt__track`).setAttribute('aria-valuenow', '100'); break;
       case 'review': stamp(e.column, 'diff review ✓'); break;
       case 'merge': merged.insertAdjacentHTML('beforeend', `<li>${e.column}</li>`); status(e.column, 'merged'); list.querySelector(`[data-col="${e.column}"]`).classList.add('is-merged'); break;
       case 'release': releaseStamp.hidden = false; releaseStamp.classList.add('is-landing'); break;
@@ -89,7 +90,7 @@ export function initWorktreeDemo(root) {
       tallyEl.innerHTML = isolated
         ? `<span><strong>This run:</strong> ${tally(totals, isolatedRelease)}</span>`
         : `<span><strong>This run:</strong> ${tally(totals, isolatedRelease)}</span><span class="soft"><strong>Isolated run:</strong> ${tally(isolatedRun.totals, isolatedRelease)}</span>`;
-      narration.textContent = isolated ? 'Every worktree merged in the order it finished. No file was touched twice.' : 'One shared file cost a collision, a rework loop, and a late release.';
+      narration.textContent = isolated ? 'Every worktree merged in the order it finished. No file was touched twice.' : 'One shared file cost a collision across two worktrees, a rework loop, and a late release.';
     };
     if (reduced()) {
       events.forEach((e) => { if (e.kind !== 'start') apply(e); });

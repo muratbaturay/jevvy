@@ -40,3 +40,13 @@ test('narration names the missing slots', () => {
   assert.match(narrate('REFUTED', []), /revise/i);
   assert.match(narrate('UNKNOWN', []), /reproduce/i);
 });
+
+// Fix pass: a static step list per outcome (review finding I3).
+import { stepsFor } from '../js/proof-logic.js';
+
+test('stepsFor lists the path a verifier takes, ending in the outcome', () => {
+  assert.deepEqual(stepsFor('VERIFIED'), ['Evidence complete? yes', 'Independent review', 'Matches the goal? yes', 'Accept and merge']);
+  assert.deepEqual(stepsFor('INCOMPLETE'), ['Evidence complete? no', 'Return for repair']);
+  assert.deepEqual(stepsFor('REFUTED'), ['Evidence complete? yes', 'Independent review', 'Matches the goal? no', 'Revise']);
+  assert.deepEqual(stepsFor('UNKNOWN'), ['Evidence complete? yes', 'Independent review: receipt does not resolve', 'Revise, and fix the receipt']);
+});

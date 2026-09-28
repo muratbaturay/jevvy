@@ -23,10 +23,40 @@ export const PROVENANCE = Object.freeze({
   workingDaysPerMonth:      { kind: 'estimate', note: 'our estimate' },
 });
 
+// Inputs above this are nonsense for the model (a billion PRs a day) and would
+// push products past what the formatters can show; clamp instead of exploding.
+export const MAX_INPUT = 1e9;
+
 export function sanitize(value) {
   const n = typeof value === 'number' ? value : parseFloat(value);
-  return Number.isFinite(n) && n >= 0 ? n : 0;
+  if (!Number.isFinite(n) || n < 0) return 0;
+  return Math.min(n, MAX_INPUT);
 }
+
+// Formatters. Anything non-finite becomes a dash rather than 'NaN' or 'Infinity'.
+const DASH = '\u2014';
+const MINUS = '\u2212';
+const grouped = (n, digits) => n.toLocaleString('en-US', { minimumFractionDigits: digits, maximumFractionDigits: digits });
+
+export function formatMoney(n) {
+  if (!Number.isFinite(n)) return DASH;
+  const abs = Math.abs(n);
+  const body = abs > 0 && abs < 0.01 ? grouped(abs, 4) : grouped(abs, 2);
+  return `${n < 0 ? MINUS : ''}$${body}`;
+}
+
+export function formatPct(share) {
+  if (!Number.isFinite(share)) return DASH;
+  const pct = share * 100;
+  if (pct === 0) return '0%';
+  if (pct < 0.1) return '<0.1%';
+  if (pct < 1) return `${pct.toFixed(1)}%`;
+  return `${pct.toFixed(0)}%`;
+}
+
+const signed = (n, digits, unit) => (Number.isFinite(n) ? `${n < 0 ? MINUS : ''}${Math.abs(n).toFixed(digits)} ${unit}` : DASH);
+export const formatSecs = (n) => signed(n, 1, 's');
+export const formatHours = (n) => signed(n, 2, 'h');
 
 function side(prs, decisionsPerDay, tokensPerDecision, generationTokensPerPr, classificationRate, generationRate, days) {
   const classificationPerDay = decisionsPerDay * tokensPerDecision / 1e6 * classificationRate;

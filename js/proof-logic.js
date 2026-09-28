@@ -25,6 +25,17 @@ export function repair(scenario) {
   return { ...scenario, evidence: all() };
 }
 
+// The verifier's path for each outcome, as a static list (reduced-motion rendering).
+const STEPS = {
+  VERIFIED:   ['Evidence complete? yes', 'Independent review', 'Matches the goal? yes', 'Accept and merge'],
+  INCOMPLETE: ['Evidence complete? no', 'Return for repair'],
+  REFUTED:    ['Evidence complete? yes', 'Independent review', 'Matches the goal? no', 'Revise'],
+  UNKNOWN:    ['Evidence complete? yes', 'Independent review: receipt does not resolve', 'Revise, and fix the receipt'],
+};
+export function stepsFor(result) {
+  return [...(STEPS[result] ?? [])];
+}
+
 export function narrate(result, missing = []) {
   switch (result) {
     case 'VERIFIED':   return 'Evidence complete, receipt reproduces, artifact matches the goal. Accept and merge.';

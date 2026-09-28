@@ -2,7 +2,7 @@
 // The SVG flow is the wide-width rendering; the .flow-list mirrors the same
 // state as a vertical list on narrow widths (CSS decides which one shows).
 import { register } from './registry.js';
-import { QUESTIONS, DEFAULT_THRESHOLD, normalizeThreshold, route } from './router-logic.js';
+import { QUESTIONS, DEFAULT_THRESHOLD, normalizeThreshold, route, gateText } from './router-logic.js';
 
 const reduced = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 const wait = (ms) => new Promise((r) => setTimeout(r, reduced() ? 0 : ms));
@@ -19,7 +19,6 @@ export function initRouterDemo(root) {
   const jevStation = svg.querySelector('[data-station="jev"]');
   const answerChips = root.querySelectorAll('[data-answer-chip]');
   const gateLabel = svg.querySelector('[data-gate-label]');
-  const GATE_TEXT = { idle: 'threshold', allowed: '≥ threshold · allowed', fallback: 'below · fall back' };
   const lines = Object.fromEntries([...svg.querySelectorAll('[data-line]')].map((l) => [l.dataset.line, l]));
   const listItems = [...root.querySelectorAll('.flow-list [data-station]')];
   const form = root.querySelector('[data-controls]');
@@ -45,7 +44,7 @@ export function initRouterDemo(root) {
   function reset() {
     Object.values(lines).forEach((l) => l.classList.remove('is-drawn'));
     gate.classList.remove('is-allowed', 'is-fallback');
-    gateLabel.textContent = GATE_TEXT.idle;
+    gateLabel.textContent = gateText('idle');
     jevStation.classList.remove('is-dim');
     root.classList.remove(...ROOT_STATES);
     listItems.forEach((li) => li.classList.remove('is-at', 'is-visited'));
@@ -56,7 +55,7 @@ export function initRouterDemo(root) {
     token.setAttribute('cx', STATION_X[station]); token.setAttribute('cy', STATION_Y[station]);
     listItems.forEach((li) => { li.classList.toggle('is-at', li.dataset.station === station); if (li.dataset.station === station) li.classList.add('is-visited'); });
   }
-  function setGate(state) { gate.classList.add(`is-${state}`); root.classList.add(`is-gate-${state}`); gateLabel.textContent = GATE_TEXT[state]; }
+  function setGate(state, path) { gate.classList.add(`is-${state}`); root.classList.add(`is-gate-${state}`); gateLabel.textContent = gateText(path); }
   async function step(line, station, id) { lines[line].classList.add('is-drawn'); await wait(120); if (id !== runId) return false; move(station); await wait(420); return id === runId; }
 
   async function run() {
@@ -70,7 +69,7 @@ export function initRouterDemo(root) {
     if (result.path === 'direct') {
       jevStation.classList.add('is-dim'); root.classList.add('is-jev-dim');
       if (!(await step('skip', 'gate', id))) return;
-      setGate('allowed');
+      setGate('allowed', 'direct');
       if (!(await step('s3', 'claude', id))) return;
       if (!(await step('s4', 'verified', id))) return;
     } else {
@@ -78,10 +77,10 @@ export function initRouterDemo(root) {
       answerChips.forEach((c) => (c.textContent = `${q.answer} · ${q.probability.toFixed(2)}`));
       if (!(await step('s2', 'gate', id))) return;
       if (result.path === 'jev') {
-        setGate('allowed');
+        setGate('allowed', 'jev');
         if (!(await step('s3', 'claude', id))) return;
       } else {
-        setGate('fallback'); root.classList.add('is-path-fallback');
+        setGate('fallback', 'fallback'); root.classList.add('is-path-fallback');
         if (!(await step('detour1', 'reason', id))) return;
         if (!(await step('detour2', 'claude', id))) return;
       }
