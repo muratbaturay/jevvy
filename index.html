@@ -154,7 +154,154 @@
       </section>
       <!-- /region:control-plane -->
       <!-- region:go-deeper -->
-      <section id="go-deeper" class="region depth" aria-labelledby="h-go-deeper"><h2 id="h-go-deeper" class="headline">Go deeper</h2></section>
+      <section id="go-deeper" class="region depth" aria-labelledby="h-go-deeper">
+        <div class="depth__panel" data-depth-panel>
+          <div class="depth__inner" inert>
+            <header class="depth__head">
+              <p class="label soft">Go deeper · inserted pages</p>
+              <h2 id="h-go-deeper" class="depth__title" tabindex="-1">Why the split pays, and where it doesn't</h2>
+              <p class="depth__lede">The three chapters are the pattern. These pages are the argument behind chapter 01, condensed from the source article and checked against what TypeSafe has published.</p>
+            </header>
+
+            <article class="depth__part" id="deeper-01">
+              <p class="label depth__num">Part 01</p>
+              <h3>Two jobs, one tool</h3>
+              <p>Every agent you build with Claude Code does two different jobs with the same model. The first is generation: write the function, draft the reply, summarise the thread. The output space is unbounded, so it needs a language model. The second is decision: did the tests pass, should this merge, is this ticket urgent. The output space is bounded and typed. Yes or no. One of five. A number between 0 and 1.</p>
+              <p>Today both jobs go through the generative model. Ask Claude whether a diff passes review and it writes a paragraph that happens to end in a verdict. You pay generation prices and generation latency for what is structurally a classification.</p>
+              <p>Jev, from TypeSafe AI, was built for the second job only. You hand it state (a diff, a log, a transcript) and a list of typed questions. It returns an answer to each, with a calibrated probability, in one round trip. It generates nothing. TypeSafe calls the training method RLCD, reinforcement learning for calibrated decisions: the objective is to be right and to know how sure to be, rather than to sound right.</p>
+              <dl class="figures">
+                <div><dt>Latency per call</dt><dd>70 to 500 ms, against 3 to 329 s for chat models reasoning their way to the same classification</dd></div>
+                <div><dt>Price</dt><dd>$0.042 per million input tokens; output tokens free, because there are none</dd></div>
+                <div><dt>Provenance</dt><dd>TypeSafe's own figures, not independently verified; access is waitlist-only as of September 2026</dd></div>
+              </dl>
+            </article>
+
+            <article class="depth__part" id="deeper-02">
+              <p class="label depth__num">Part 02</p>
+              <h3>Where the multiplier comes from</h3>
+              <p>The 20 to 200x figure is not one Jev call racing one Claude call. It comes from decision density. Inside a real loop most model calls are checks: did that step succeed, is this the right file, does the output satisfy the constraint, retry or escalate. The source article's author counted 31 bounded checks in a single session that fixed a 340-line auth module. Each one went through the full model, which reasoned in prose and then concluded, for a question with two or three valid answers.</p>
+              <p>Move those 31 checks to a classifier and you have not made one call faster. You have removed 31 generation calls and replaced them with 31 calls that return in under half a second for a fraction of a cent. The gain compounds at every decision point. A loop that is mostly generation, such as writing a long document, gets almost nothing, because there is nothing to offload.</p>
+            </article>
+
+            <article class="depth__part" id="deeper-03">
+              <p class="label depth__num">Part 03</p>
+              <h3>Three steps to wire it in</h3>
+              <h4>1. Audit the decision points</h4>
+              <p>Take a real transcript, not an imagined one, and mark every place the model was asked a bounded question. Five lines per point:</p>
+              <pre class="code" aria-label="Decision point audit template"><span class="code__tag">template</span>Location:      where in the loop
+Question:      as asked, verbatim
+Answer space:  bounded or unbounded
+Current cost:  tokens, seconds
+Candidate:     yes or no</pre>
+              <p>In loops with a review or validation step, expect 25 to 40% of calls to be decisions in a generation costume.</p>
+              <h4>2. Define the typed schema</h4>
+              <p>Give Jev the context and a list of typed questions. Every question is scored in the same round trip, so three questions cost one call, not three.</p>
+              <pre class="code" aria-label="Illustrative schema"><span class="code__tag">illustrative</span>context:   &lt;raw test output&gt;
+questions:
+  - id: tests_pass        type: boolean
+  - id: failure_kind      type: one-of [flake, related, environment, none]
+  - id: confidence        type: score 0..1</pre>
+              <h4>3. Route inside the loop</h4>
+              <p>At each decision point, insert a router instead of a call to the generative model.</p>
+              <pre class="code" aria-label="Illustrative router"><span class="code__tag">illustrative</span>decide(question, context):
+  if question is a judgment call:   return claude.decide(context)
+  answer = jev.ask(context, question.schema)
+  if answer.probability &gt;= threshold[question.id]:
+      return answer.value
+  return claude.decide(context)      # fall back below threshold</pre>
+              <p>The fallback line matters more than it looks. Part 07 is about it.</p>
+            </article>
+
+            <article class="depth__part" id="deeper-04">
+              <p class="label depth__num">Part 04</p>
+              <h3>A worked loop: review, decide, fix, rerun</h3>
+              <p>An agent reviews a pull request, decides whether it needs changes, fixes it, reruns the tests, and decides what to do next. Figures are the source article's estimates for one PR.</p>
+              <table class="ledger-table">
+                <caption class="visually-hidden">Before and after moving the three decisions to Jev</caption>
+                <thead><tr><th scope="col">Step</th><th scope="col">Before</th><th scope="col">After</th></tr></thead>
+                <tbody>
+                  <tr><th scope="row">1 · Review the diff</th><td data-col="Before">Claude generates, ~1,400 tokens, ~11 s</td><td data-col="After">unchanged</td></tr>
+                  <tr><th scope="row">2 · Verdict: approve, change, escalate</th><td data-col="Before">Claude generates, ~600 tokens, ~5 s</td><td data-col="After">Jev, ~0.3 s</td></tr>
+                  <tr><th scope="row">3 · Write the fix</th><td data-col="Before">Claude generates</td><td data-col="After">unchanged</td></tr>
+                  <tr><th scope="row">4 · Did the tests pass, and is it my change?</th><td data-col="Before">Claude generates, ~500 tokens, ~4 s</td><td data-col="After">Jev, ~0.25 s</td></tr>
+                  <tr><th scope="row">5 · Merge, retry, or flag a human</th><td data-col="Before">Claude generates, ~450 tokens, ~4 s</td><td data-col="After">Jev, ~0.28 s</td></tr>
+                  <tr class="ledger-table__total"><th scope="row">Decision overhead per PR</th><td data-col="Before">~1,550 tokens, ~13 s</td><td data-col="After">~0.8 s, input tokens only</td></tr>
+                </tbody>
+              </table>
+              <p>The review and the fix stayed on Claude. Only the classification weight moved. On a team pushing 40 to 60 PRs a day through a loop like this, that is the difference between an agent that feels slow in CI and one that answers before you have switched tabs.</p>
+            </article>
+
+            <article class="depth__part" id="deeper-05">
+              <p class="label depth__num">Part 05</p>
+              <h3>Where the ceiling is real</h3>
+              <p>The top of the range shows up in one narrow band: high frequency, low ambiguity, tightly bounded decisions, run at volume.</p>
+              <ul class="bands">
+                <li><strong>Triage queues.</strong> Urgent, standard, or spam, thousands of times a day.</li>
+                <li><strong>CI gating.</strong> Pass, fail, or flaky, on every commit across a large repository.</li>
+                <li><strong>Policy filters.</strong> Does this output break a fixed rule, checked before every generation ships.</li>
+                <li><strong>Handoff routing.</strong> Which of five specialist agents takes this task, at the top of every workflow.</li>
+              </ul>
+              <p>In each, the schema barely changes and a wrong answer is cheap enough that a threshold plus a fallback catches the edge cases. Outside that band, expect the bottom of the range.</p>
+            </article>
+
+            <article class="depth__part" id="deeper-06">
+              <p class="label depth__num">Part 06</p>
+              <h3>Where forcing it backfires</h3>
+              <p>Jev cannot hallucinate free text, because it never writes any. It can absolutely pick the wrong option inside a valid schema. If your categories overlap or your context is thin, it still returns a confident, clean-looking answer, because that is what it is built to do. A broken schema does not raise an error. It produces a wrong answer that looks exactly like a right one.</p>
+              <p>The source article's author learned this on a content pipeline: four categories along the lines of "high priority", "urgent", "needs review", and "flag" that were not mutually exclusive. The answers were fast, cheap, confident, and internally inconsistent about a third of the time. Fixing the schema cost about six hours of relabelling.</p>
+              <p>Do not route these to a classifier:</p>
+              <ul class="bands">
+                <li><strong>Judgment calls.</strong> Is this writing good, is this argument persuasive. No fixed schema captures it.</li>
+                <li><strong>Low-volume, high-stakes decisions.</strong> Five times a month does not repay the setup.</li>
+                <li><strong>Anything generative.</strong> A classifier bent into a writer is a worse writer.</li>
+                <li><strong>Schemas still changing weekly.</strong> Categories you are still discovering are not ready to offload.</li>
+              </ul>
+            </article>
+
+            <article class="depth__part" id="deeper-07">
+              <p class="label depth__num">Part 07</p>
+              <h3>Verification when the failure looks clean</h3>
+              <p>Because the failure mode is a confident wrong answer rather than an obvious one, the verification layer cannot rely on the output looking wrong. Two mechanisms do the work.</p>
+              <p><strong>A threshold per decision type, not one global number.</strong> A merge-or-flag decision and a spam-or-not decision have different acceptable error rates. Set each threshold by measuring disagreement against Claude on a sample, not by picking a round number. The source article uses 0.87 as an example for one decision; it is an example, not a rule.</p>
+              <p><strong>A shadow check on high-stakes decisions.</strong> Even above threshold, send a small share (the article uses 5%) through Claude in parallel, logged rather than blocking, and record disagreements. That is how schema drift shows up as a log line instead of a downstream failure.</p>
+              <pre class="code" aria-label="Illustrative tuned router"><span class="code__tag">illustrative</span>decide(question, context):
+  answer = jev.ask(context, question.schema)
+  if answer.probability &lt; threshold[question.id]:
+      return claude.decide(context)
+  if question.id in HIGH_STAKES and random() &lt; 0.05:
+      shadow = claude.decide(context)          # not blocking
+      log_if_different(answer.value, shadow)
+  return answer.value</pre>
+              <p>Chapter 03 says the same thing in one line: confidence is not proof.</p>
+            </article>
+
+            <article class="depth__part depth__part--ledger" id="deeper-08">
+              <p class="label depth__num">Part 08</p>
+              <h3>The cost ledger</h3>
+              <p>The saving is not the whole bill. It is the classification tax you were paying without knowing it was separable. Start from the article's assumptions, then type in your own numbers.</p>
+              <div data-ledger></div>
+            </article>
+
+            <article class="depth__part" id="deeper-09">
+              <p class="label depth__num">Part 09</p>
+              <h3>Five mistakes, and the actual skill</h3>
+              <ol class="mistakes">
+                <li><strong>Routing generation to a classifier because it is cheap.</strong> It will answer. The answer will be bad.</li>
+                <li><strong>One global threshold.</strong> A misrouted ticket and a merged bad PR are not the same risk.</li>
+                <li><strong>Skipping the schema audit.</strong> Overlapping categories do not error; they drift.</li>
+                <li><strong>Never sampling for drift.</strong> Sure and correct diverge as inputs shift. Without a shadow check, you find out from a failure.</li>
+                <li><strong>Treating 200x as a target.</strong> It describes one band of work. Bending your architecture toward the number means bending it away from your problem.</li>
+              </ol>
+              <p>None of this makes Jev smarter than Claude Code, and none of it replaces Claude Code. The skill is decomposition: look at a loop you already built and ask, honestly, which parts generate and which parts are classification in a generation costume. The teams getting real multipliers did the audit first and moved only that.</p>
+              <p class="depth__next"><a href="#worktree-method">Next: isolate the work before you parallelize it. → Chapter 02</a></p>
+            </article>
+
+            <footer class="depth__foot">
+              <button type="button" class="btn btn--ghost" data-close-depth>Close these pages</button>
+            </footer>
+          </div>
+        </div>
+      </section>
       <!-- /region:go-deeper -->
       <!-- region:worktree-method -->
       <section id="worktree-method" class="region chapter" aria-labelledby="h-worktree-method"><h2 id="h-worktree-method" class="headline">02 · The Worktree Method</h2></section>
