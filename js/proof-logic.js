@@ -28,7 +28,7 @@ export function repair(scenario) {
 export function narrate(result, missing = []) {
   switch (result) {
     case 'VERIFIED':   return 'Evidence complete, receipt reproduces, artifact matches the goal. Accept and merge.';
-    case 'INCOMPLETE': return `${missing.join(', ')} missing. Not done: return for repair.`;
+    case 'INCOMPLETE': return `Missing: ${missing.join(', ')}. Not done: return for repair.`;
     case 'REFUTED':    return "Evidence is complete, but the artifact doesn't do what the goal asked. Revise.";
     case 'UNKNOWN':    return "The receipt doesn't resolve, so the review can't reproduce the result. Revise, and fix the receipt.";
     default:           return '';

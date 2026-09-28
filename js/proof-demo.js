@@ -16,6 +16,7 @@ export function initProofDemo(root) {
   const slots = root.querySelector('[data-slots]');
   const nodes = [...root.querySelectorAll('[data-node]')];
   const stampSlot = root.querySelector('[data-stamp-slot]');
+  const stampSlotComplete = root.querySelector('[data-stamp-slot-complete]');
   const btnReturn = root.querySelector('[data-return]');
   const btnVerify = root.querySelector('[data-verify]');
   const btnRepair = root.querySelector('[data-repair]');
@@ -35,6 +36,7 @@ export function initProofDemo(root) {
     cancel();
     nodes.forEach((n) => n.classList.remove('is-lit', 'is-off'));
     stampSlot.innerHTML = '';
+    stampSlotComplete.innerHTML = '';
     btnVerify.disabled = true;
     btnRepair.hidden = true;
     returned = false;
@@ -58,7 +60,8 @@ export function initProofDemo(root) {
     const missing = missingSlots(scenario.evidence);
     nodes.forEach((n) => n.classList.toggle('is-off', !LIT[result].includes(n.dataset.node)));
     LIT[result].forEach((id, i) => later(() => nodes.find((n) => n.dataset.node === id).classList.add('is-lit'), 160 * i));
-    if (result !== 'INCOMPLETE') later(() => { stampSlot.innerHTML = `<span class="stamp is-landing ${STAMP_CLASS[result]}">${result}</span>`; }, 160 * 2);
+    const target = result === 'INCOMPLETE' ? stampSlotComplete : stampSlot;
+    later(() => { target.innerHTML = `<span class="stamp is-landing ${STAMP_CLASS[result]}">${result}</span>`; }, 160 * (result === 'INCOMPLETE' ? 1 : 2));
     later(() => { narration.textContent = narrate(result, missing); btnRepair.hidden = result !== 'INCOMPLETE'; btnVerify.disabled = true; }, 160 * LIT[result].length);
   }
   select.addEventListener('change', () => { scenario = SCENARIOS[select.value]; resetFlow(); narration.textContent = 'Return the evidence, then verify.'; });

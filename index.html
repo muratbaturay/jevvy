@@ -25,10 +25,10 @@
       <ol class="margin__numbers" aria-hidden="true" data-line-numbers></ol>
       <ul class="margin__markers">
         <li><a href="#control-plane" data-marker="control-plane"><span class="label">01</span><span class="margin__name">Control plane</span></a></li>
-        <li><a href="#go-deeper" data-marker="go-deeper" data-opens-depth><span class="label">Deeper</span><span class="margin__name">Go deeper</span></a></li>
+        <li><a href="#go-deeper" data-marker="go-deeper" data-opens-depth><span class="label">Deeper</span></a></li>
         <li><a href="#worktree-method" data-marker="worktree-method"><span class="label">02</span><span class="margin__name">Worktree method</span></a></li>
         <li><a href="#proof-contract" data-marker="proof-contract"><span class="label">03</span><span class="margin__name">Proof contract</span></a></li>
-        <li><a href="#receipt" data-marker="receipt"><span class="label">Receipt</span><span class="margin__name">Receipt</span></a></li>
+        <li><a href="#receipt" data-marker="receipt"><span class="label">Receipt</span></a></li>
       </ul>
     </nav>
     <!-- /region:nav -->
@@ -42,7 +42,7 @@
         <h1 class="display hero__title" data-reveal>Stop paying a writer to answer yes or no.</h1>
         <p class="hero__deck" data-reveal style="--i:1">A field guide to splitting judgment from execution in Claude Code agents, with Jev answering the bounded questions.</p>
         <aside class="sticky hero__credit" data-reveal style="--i:2" aria-label="Credit">
-          Adapted from the <a href="https://x.com/cyrilxbt" rel="noopener">Agent Field Guide by @cyrilxbt</a> and a source article on the Jev + Claude Code stack (<span data-article-link>link pending</span>). Rebuilt, reworded, and fact-checked, September 2026.
+          Adapted from the <a href="https://x.com/cyrilxbt" rel="noopener">Agent Field Guide by @cyrilxbt</a> and a source article on the Jev + Claude Code stack. Rebuilt, reworded, and fact-checked, September 2026.
         </aside>
         <ul class="hero__chips" data-reveal style="--i:3">
           <li><a class="chip" href="#control-plane">01 Control plane</a></li>
@@ -95,24 +95,24 @@
             <title id="flow-title">Request flow through Jev, the policy gate, and Claude Code</title>
             <desc id="flow-desc">Five stations left to right: goal and evidence, Jev answers, policy gate, Claude Code acts, result verified. Below the gate, a detour to Claude reasoning for low-confidence answers.</desc>
             <g class="flow__rest" fill="none" stroke="currentColor" stroke-width="2" stroke-dasharray="3 5" opacity="0.3">
-              <path d="M180 70 H260"/><path d="M420 70 H500"/><path d="M600 70 H680"/><path d="M840 70 H920"/>
+              <path d="M180 70 H260"/><path d="M420 70 H500"/><path d="M600 70 H680"/><path d="M840 70 H900"/>
             </g>
             <g class="flow__lines" fill="none" stroke="currentColor" stroke-width="2">
               <path data-line="s1" d="M180 70 H260"/>
               <path data-line="s2" d="M420 70 H500"/>
               <path data-line="s3" d="M600 70 H680"/>
-              <path data-line="s4" d="M840 70 H920"/>
+              <path data-line="s4" d="M840 70 H900"/>
               <path data-line="skip" d="M180 70 C 300 20, 380 20, 500 70" stroke-dasharray="6 6" opacity="0.5"/>
-              <path data-line="detour1" d="M550 100 V150 H435" stroke-dasharray="6 6"/>
-              <path data-line="detour2" d="M435 150 H760 V100" stroke-dasharray="6 6"/>
+              <path data-line="detour1" d="M550 100 V150 H600" stroke-dasharray="6 6"/>
+              <path data-line="detour2" d="M730 150 H760 V100" stroke-dasharray="6 6"/>
             </g>
             <g class="flow__stations">
-              <g data-station="goal"><rect x="20" y="40" width="160" height="60" rx="6"/><text x="100" y="66">Goal + evidence</text><text x="100" y="86" class="flow__small">goal, context, evidence</text></g>
+              <g data-station="goal"><rect x="20" y="40" width="160" height="60" rx="6"/><text x="100" y="66">Goal + evidence</text><text x="100" y="86" class="flow__small">goal + context</text></g>
               <g data-station="jev"><rect x="260" y="40" width="160" height="60" rx="6"/><text x="340" y="66">Jev answers</text><text x="340" y="86" class="flow__small" data-answer-chip>typed + probability</text></g>
-              <g data-station="gate"><rect x="500" y="40" width="100" height="60" rx="6"/><text x="550" y="66">Policy</text><text x="550" y="86">gate</text></g>
+              <g data-station="gate"><rect x="500" y="40" width="100" height="60" rx="6"/><text x="550" y="66">Policy gate</text><text x="550" y="86" class="flow__small" data-gate-label>threshold</text></g>
               <g data-station="claude"><rect x="680" y="40" width="160" height="60" rx="6"/><text x="760" y="66">Claude Code acts</text><text x="760" y="86" class="flow__small">reads, edits, runs</text></g>
-              <g data-station="verified"><rect x="920" y="40" width="60" height="60" rx="6"/><text x="950" y="75">✓</text></g>
-              <g data-station="reason"><rect x="285" y="130" width="150" height="40" rx="6"/><text x="360" y="155">Claude reasons</text></g>
+              <g data-station="verified"><rect x="900" y="40" width="90" height="60" rx="6"/><text x="945" y="66">✓</text><text x="945" y="86" class="flow__small">verified</text></g>
+              <g data-station="reason"><rect x="600" y="130" width="130" height="40" rx="6"/><text x="665" y="155">Claude reasons</text></g>
             </g>
             <circle class="flow__token" data-token r="8" cx="180" cy="70"/>
           </svg>
@@ -136,7 +136,7 @@
             </div>
             <button type="submit" class="btn">Run</button>
           </form>
-          <figcaption class="narration" data-narration aria-live="polite">Pick a question and press Run.</figcaption>
+          <figcaption class="narration" data-narration aria-live="polite">Press Run, or pick another question.</figcaption>
         </figure>
 
         <div class="rule-strip" data-reveal>
@@ -320,9 +320,9 @@ questions:
             <div class="panel panel--marker worktree__merge"><p class="panel__title">Verified merge queue</p><ol class="worktree__merged label" data-merged aria-label="Merged in order"></ol></div>
             <div class="bar worktree__release"><span class="headline">One clean release</span><span class="stamp" data-release-stamp hidden>1 clean release</span></div>
           </div>
+          <div class="worktree__tally" data-tally aria-live="polite"></div>
           <div class="demo__controls worktree__controls">
-            <label class="worktree__toggle"><input type="checkbox" data-isolation-toggle> Without isolation</label>
-            <p class="label" data-tally aria-live="polite"></p>
+            <label class="worktree__toggle"><input type="checkbox" data-isolation-toggle> Without isolation: B and C share a file</label>
             <button type="button" class="btn" data-replay>Replay</button>
           </div>
           <figcaption class="narration" data-narration aria-live="polite">Four worktrees fill in parallel. Watch the merge queue.</figcaption>
@@ -338,7 +338,7 @@ questions:
         </ol>
 
         <div class="panel panel--mint warning" data-reveal>
-          <p class="headline warning__line">Parallelism without isolation creates rework.</p>
+          <p class="headline warning__line"><span aria-hidden="true">⚠ </span>Parallelism without isolation creates rework.</p>
           <p>Collapsed workspaces, conflicting edits, and untested changes slow everyone down.</p>
         </div>
         <div class="bar" data-reveal><span class="headline">More agents only help when the work is isolated.</span></div>
@@ -382,7 +382,7 @@ questions:
           </div>
           <ol class="proof__slots" data-slots aria-label="Evidence returned"></ol>
           <div class="proof__flow">
-            <div class="proof__node" data-node="complete"><span class="label">Evidence complete?</span></div>
+            <div class="proof__node" data-node="complete"><span class="label">Evidence complete?</span><span class="proof__stamp" data-stamp-slot-complete></span></div>
             <div class="proof__node proof__node--review" data-node="review"><span class="label">Independent review</span><span class="proof__stamp" data-stamp-slot></span></div>
             <div class="proof__node" data-node="match"><span class="label">Matches the goal?</span></div>
             <div class="proof__node proof__node--accept bar" data-node="accept"><span class="headline">Accept + merge</span></div>
@@ -402,7 +402,7 @@ questions:
             <p>A calibrated probability says how sure the classifier is, not whether it is right. That is why chapter 01's router keeps a shadow check.</p>
           </div>
         </div>
-        <div class="bar bar--teal" data-reveal><span class="headline">Trust the receipt, not the claim.</span></div>
+        <div class="bar" data-reveal><span class="headline">Trust the receipt, not the claim.</span></div>
       </section>
       <!-- /region:proof-contract -->
       <!-- region:receipt -->
@@ -410,9 +410,9 @@ questions:
         <div class="receipt__paper" data-reveal>
           <h2 id="h-receipt" class="receipt__title">Jevvy · field guide receipt</h2>
           <dl class="receipt__lines">
-            <div><dt>Artifact</dt><dd>This page. One HTML file, no build step.</dd></div>
+            <div><dt>Artifact</dt><dd>This page. One HTML page, plain CSS and JS, no build step.</dd></div>
             <div><dt>Diff</dt><dd>Adapted from the <a href="https://x.com/cyrilxbt" rel="noopener">Agent Field Guide by @cyrilxbt</a>, three pages, and the source article "The Jev + Claude Code Stack" (<span data-article-link>link pending</span>, author unnamed). Rewritten, restructured, and corrected: Jev's role, ranges instead of headline multipliers, anecdotes attributed.</dd></div>
-            <div><dt>Tests</dt><dd>Unit tests for the ledger math, the router, the verifier, and the merge timeline. Lighthouse: accessibility 100, performance 95 or better. Checked at three widths, with reduced motion on and off.</dd></div>
+            <div><dt>Tests</dt><dd>Unit tests for the ledger math, the router, the verifier, and the merge timeline. Lighthouse on the last local run (mobile profile): accessibility 100, best practices 100, performance 95. Checked at three widths, with reduced motion on and off.</dd></div>
             <div><dt>Limits</dt><dd>Speed and cost figures are TypeSafe's own internal evaluations, not independently verified. Jev access is waitlist-only as of September 2026. Ledger defaults are the article's assumptions; edit them.</dd></div>
             <div><dt>Receipt</dt><dd><a href="https://github.com/muratbaturay/jevvy" rel="noopener">github.com/muratbaturay/jevvy</a><br>Printed: <time data-printed datetime="2026-09-28">28 September 2026</time></dd></div>
             <div><dt>Sources</dt><dd>

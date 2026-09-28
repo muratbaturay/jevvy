@@ -26,7 +26,7 @@ export function initNav(nav) {
   // Scroll-spy: the section whose top is closest above the 40% line wins.
   function spy() {
     const line = window.innerHeight * 0.4;
-    let current = sections[0];
+    let current = null;
     for (const s of sections) if (s.getBoundingClientRect().top <= line) current = s;
     markers.forEach((a) => a.dataset.marker === current?.id ? a.setAttribute('aria-current', 'true') : a.removeAttribute('aria-current'));
   }

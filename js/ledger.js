@@ -16,7 +16,7 @@ const FIELDS = [
 const KIND_LABEL = { article: 'from the article', derived: 'derived', estimate: 'our estimate' };
 
 const money = (n) => (Math.abs(n) >= 0.01 || n === 0 ? `$${n.toFixed(2)}` : `$${n.toFixed(4)}`);
-const pct = (n) => `${(n * 100).toFixed(0)}%`;
+const pct = (n) => (n > 0 && n < 0.001 ? '<0.1%' : `${(n * 100).toFixed(0)}%`);
 const secs = (n) => `${n.toFixed(1)} s`;
 const hours = (n) => `${n.toFixed(2)} h`;
 
@@ -27,7 +27,7 @@ export function initLedger(root) {
       <div class="ledger__inputs">
         ${FIELDS.map(([key, label, unit]) => `
           <div class="ledger__input">
-            <label for="ledger-${key}">${label} <span class="soft">(${unit})</span></label>
+            <label for="ledger-${key}">${label} <span class="soft ledger__unit">(${unit})</span></label>
             <input id="ledger-${key}" name="${key}" type="number" inputmode="decimal" min="0" step="any" value="${DEFAULTS[key]}" aria-describedby="ledger-${key}-prov">
             <small id="ledger-${key}-prov" class="ledger__prov ledger__prov--${PROVENANCE[key].kind}" title="${PROVENANCE[key].note}">${KIND_LABEL[PROVENANCE[key].kind]}</small>
             <small class="ledger__error" data-error-for="${key}" hidden>Enter a number of zero or more.</small>

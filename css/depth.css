@@ -1,5 +1,7 @@
 /* Depth layer: inserted typed pages, Literata prose, ledger. */
 .depth { padding-block: 0; }
+.depth.is-open { margin-bottom: var(--sp-section); }
+.depth:not(.is-open) .depth__inner { border-block-width: 0; }
 .depth__panel { display: grid; grid-template-rows: 0fr; transition: grid-template-rows var(--dur-slow) var(--ease); }
 .depth.is-open .depth__panel { grid-template-rows: 1fr; }
 .depth__inner { min-height: 0; overflow: hidden; }
@@ -29,6 +31,7 @@
   border: 1px solid var(--ink); border-radius: var(--radius-md); background: var(--card);
   font-family: var(--font-mono); font-size: 0.9rem; line-height: 1.5; white-space: pre;
 }
+@media (max-width: 480px) { .code { font-size: 0.78rem; white-space: pre-wrap; } }
 .code__tag { position: absolute; top: 6px; right: 10px; font-size: var(--fs-label); font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-soft); }
 
 .figures { display: grid; gap: var(--sp-sm); font-family: var(--font-mono); font-size: var(--fs-body); }
@@ -58,10 +61,13 @@
 
 /* ---------- Ledger ---------- */
 .depth__part--ledger { max-width: min(100%, 960px); }
+.depth__part--ledger > :not([data-ledger]) { width: 100%; max-width: var(--measure); margin-inline: auto; }
 [data-ledger] { display: grid; gap: var(--sp-lg); font-family: var(--font-mono); font-size: var(--fs-body); max-width: none; }
 .ledger__form { display: grid; gap: var(--sp-md); border: 1px solid var(--ink); border-radius: var(--radius-md); padding: var(--sp-lg); background: var(--card); }
-.ledger__inputs { display: grid; gap: var(--sp-md); grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
-.ledger__input { display: grid; gap: var(--sp-xs); }
+.ledger__inputs { display: grid; gap: var(--sp-md); grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); }
+@media (min-width: 700px) { .ledger__inputs { grid-template-columns: repeat(3, 1fr); } }
+.ledger__input { display: grid; gap: var(--sp-xs); align-content: start; }
+.ledger__unit { white-space: nowrap; }
 .ledger__input input { width: 100%; padding: 8px 10px; border: 1px solid var(--ink); border-radius: var(--radius-sm); background: var(--card); }
 .ledger__input input[aria-invalid="true"] { border-color: var(--signal); }
 .ledger__prov { font-size: var(--fs-label); text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-soft); }
@@ -73,7 +79,7 @@
 .ledger__side dl, .ledger__totals { display: grid; gap: var(--sp-xs); }
 .ledger__side dl div, .ledger__totals div { display: flex; justify-content: space-between; gap: var(--sp-md); padding: 6px 0; border-top: 1px dashed var(--rule); }
 .ledger__side dd, .ledger__totals dd { margin: 0; font-weight: 700; font-variant-numeric: tabular-nums; }
-.ledger__row--total dt, .ledger__row--total dd { color: var(--teal); }
+.ledger__row--total { border-top-style: solid !important; border-top-color: var(--ink) !important; }
 .ledger__totals { border: 1px solid var(--ink); border-radius: var(--radius-md); padding: var(--sp-md) var(--sp-lg); background: var(--mint); }
 .ledger__note { font-size: var(--fs-body); }
 @media (min-width: 700px) { .ledger__sides { grid-template-columns: 1fr 1fr; } }

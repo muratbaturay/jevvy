@@ -42,7 +42,7 @@ typography:
     lineHeight: 1.65
   label:
     fontFamily: "'Courier Prime', 'Courier New', monospace"
-    fontSize: "0.72rem"
+    fontSize: "0.75rem"
     fontWeight: 700
     lineHeight: 1.2
     letterSpacing: "0.08em"
@@ -123,10 +123,7 @@ components:
     textColor: "{colors.ink}"
 ---
 
-<!-- SEED -->
-<!-- Seeded from the design spec on 2026-09-28, before any code exists.
-     Re-run `$impeccable document` in scan mode once index.html and css/ are
-     built so the tokens reflect the real stylesheet. -->
+<!-- Refreshed from the built stylesheet on 2026-09-28 (scan mode). Tokens live in css/tokens.css; fonts in css/fonts.css. -->
 
 # Design System: Jevvy Field Guide
 
@@ -205,6 +202,11 @@ or teal is always card-white and at least 14px.
 (with Georgia) in the depth layer
 **Label/Mono Font:** Courier Prime
 
+All three are self-hosted latin subsets under `fonts/` (SIL OFL, licence
+texts alongside), declared in `css/fonts.css` with `font-display: swap`;
+Anton and Courier Prime 400 are preloaded. Literata is the variable cut with
+`opsz` and `wght` axes; prose sets `opsz` 14, headings 36, the title 72.
+
 **Character:** A poster headline over a typewritten manual. Anton shouts in
 black bars; Courier Prime does the patient explaining; Literata takes over
 only when the reader has chosen to read for ten minutes.
@@ -218,7 +220,7 @@ only when the reader has chosen to read for ten minutes.
 - **Body** (400, 0.95rem, 1.5): chapter card copy, control labels, receipt.
 - **Body, depth** (Literata 400, 1.0625rem, 1.65): depth-layer paragraphs at
   a 65ch measure; headings Literata 600 `clamp(1.35rem, 2.4vw, 1.75rem)`.
-- **Label** (700, 0.72rem, 0.08em, uppercase): running head, margin markers,
+- **Label** (700, 0.75rem, 0.08em, uppercase): running head, margin markers,
   chip labels, "illustrative" tags.
 
 ### Named Rules
@@ -282,6 +284,23 @@ A rotated, uppercase mono word in a 2px border of its own colour (ink for
 review stamps and VERIFIED, signal red for REFUTED, ink-soft for UNKNOWN,
 marker for INCOMPLETE), `mix-blend-mode: multiply`, landing with a 250 ms
 scale-in. It is the page's one recurring "moving print" motif.
+
+### Flow list (narrow-width mirror of the SVG flow)
+Below 700px the chapter 1 SVG is replaced by `.flow-list`, a vertical list of
+the same stations. State is mirrored through classes on the demo root
+(`is-gate-allowed`, `is-gate-fallback`, `is-jev-dim`, `is-path-fallback`) and
+`is-at` / `is-visited` on items; unvisited items sit at 55% opacity.
+
+### Ledger (depth layer)
+Two sticker cards side by side from 700px, "Before" and "After", each a
+definition list with dashed rules and tabular numerals; totals in teal; a
+mint totals panel underneath. Inputs carry a provenance label ("from the
+article", "derived", "≈ our estimate") in label type below the field.
+
+### Receipt (footer)
+A 420px till slip: card-white, 1px ink border, perforated top edge drawn with
+`clip-path`, dashed rules, label-type row headings in a 7em column. Centred:
+the only centred element on the page.
 
 ### Sticky note (signature component)
 Marker-yellow square, no border, rotated between -2 and 2 degrees, Sticky
