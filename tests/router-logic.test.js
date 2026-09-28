@@ -49,8 +49,8 @@ test('threshold is rounded to two decimals and clamped', () => {
 import { gateText } from '../js/router-logic.js';
 
 test('gate text names the reason the gate opened', () => {
-  assert.equal(gateText('jev'), '≥ threshold · allowed');
-  assert.equal(gateText('fallback'), 'below · fall back');
-  assert.equal(gateText('direct'), 'no threshold · allowed');
+  assert.equal(gateText('jev'), '≥ threshold ✓');
+  assert.equal(gateText('fallback'), '< threshold ↓');
+  assert.equal(gateText('direct'), 'no threshold');
   assert.equal(gateText('idle'), 'threshold');
 });

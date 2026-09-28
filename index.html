@@ -97,21 +97,21 @@
             <title id="flow-title">Request flow through Jev, the policy gate, and Claude Code</title>
             <desc id="flow-desc">Five stations left to right: goal and evidence, Jev answers, policy gate, Claude Code acts, result verified. Below the gate, a detour to Claude reasoning for low-confidence answers.</desc>
             <g class="flow__rest" fill="none" stroke="currentColor" stroke-width="2" stroke-dasharray="3 5" opacity="0.3">
-              <path d="M180 70 H260"/><path d="M420 70 H500"/><path d="M600 70 H680"/><path d="M840 70 H900"/>
+              <path d="M180 70 H260"/><path d="M420 70 H480"/><path d="M620 70 H680"/><path d="M840 70 H900"/>
             </g>
             <g class="flow__lines" fill="none" stroke="currentColor" stroke-width="2">
               <path data-line="s1" d="M180 70 H260"/>
-              <path data-line="s2" d="M420 70 H500"/>
-              <path data-line="s3" d="M600 70 H680"/>
+              <path data-line="s2" d="M420 70 H480"/>
+              <path data-line="s3" d="M620 70 H680"/>
               <path data-line="s4" d="M840 70 H900"/>
-              <path data-line="skip" d="M180 70 C 300 20, 380 20, 500 70" stroke-dasharray="6 6" opacity="0.5"/>
+              <path data-line="skip" d="M180 70 C 300 20, 380 20, 480 70" stroke-dasharray="6 6" opacity="0.5"/>
               <path data-line="detour1" d="M550 100 V150 H600" stroke-dasharray="6 6"/>
               <path data-line="detour2" d="M730 150 H760 V100" stroke-dasharray="6 6"/>
             </g>
             <g class="flow__stations">
               <g data-station="goal"><rect x="20" y="40" width="160" height="60" rx="6"/><text x="100" y="66">Goal + evidence</text><text x="100" y="86" class="flow__small">goal + context</text></g>
               <g data-station="jev"><rect x="260" y="40" width="160" height="60" rx="6"/><text x="340" y="66">Jev answers</text><text x="340" y="86" class="flow__small" data-answer-chip>typed + probability</text></g>
-              <g data-station="gate"><rect x="500" y="40" width="100" height="60" rx="6"/><text x="550" y="66">Policy gate</text><text x="550" y="86" class="flow__small" data-gate-label>threshold</text></g>
+              <g data-station="gate"><rect x="480" y="40" width="140" height="60" rx="6"/><text x="550" y="66">Policy gate</text><text x="550" y="86" class="flow__small" data-gate-label>threshold</text></g>
               <g data-station="claude"><rect x="680" y="40" width="160" height="60" rx="6"/><text x="760" y="66">Claude Code acts</text><text x="760" y="86" class="flow__small">reads, edits, runs</text></g>
               <g data-station="verified"><rect x="900" y="40" width="90" height="60" rx="6"/><text x="945" y="66">✓</text><text x="945" y="86" class="flow__small">verified</text></g>
               <g data-station="reason"><rect x="600" y="130" width="130" height="40" rx="6"/><text x="665" y="155">Claude reasons</text></g>

@@ -18,9 +18,9 @@ const fmt = (n) => n.toFixed(2);
 // What the policy-gate label says for each routing outcome (and at rest).
 const GATE_TEXT = {
   idle: 'threshold',
-  jev: '≥ threshold · allowed',
-  fallback: 'below · fall back',
-  direct: 'no threshold · allowed',
+  jev: '≥ threshold ✓',
+  fallback: '< threshold ↓',
+  direct: 'no threshold',
 };
 export function gateText(path) {
   return GATE_TEXT[path] ?? GATE_TEXT.idle;

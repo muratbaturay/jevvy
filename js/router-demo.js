@@ -8,7 +8,7 @@ const reduced = () => window.matchMedia('(prefers-reduced-motion: reduce)').matc
 const wait = (ms) => new Promise((r) => setTimeout(r, reduced() ? 0 : ms));
 
 // Token rests on the entry edge of each station so it never covers a label.
-const STATION_X = { goal: 180, jev: 262, gate: 502, claude: 682, verified: 902, reason: 602 };
+const STATION_X = { goal: 180, jev: 262, gate: 482, claude: 682, verified: 902, reason: 602 };
 const STATION_Y = { goal: 70, jev: 70, gate: 70, claude: 70, verified: 70, reason: 150 };
 const ROOT_STATES = ['is-path-fallback', 'is-jev-dim', 'is-gate-allowed', 'is-gate-fallback'];
 
