@@ -1,0 +1,6 @@
+# Local-only source material (third-party content, not for publication)
+reference/
+
+# OS / editor
+.DS_Store
+node_modules/
