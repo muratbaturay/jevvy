@@ -20,11 +20,35 @@
   <a class="skip-link" href="#main">Skip to content</a>
   <div class="page">
     <!-- region:nav -->
-    <nav class="margin" aria-label="Chapters"></nav>
+    <nav class="margin" aria-label="Chapters">
+      <ol class="margin__numbers" aria-hidden="true" data-line-numbers></ol>
+      <ul class="margin__markers">
+        <li><a href="#control-plane" data-marker="control-plane"><span class="label">01</span><span class="margin__name">Control plane</span></a></li>
+        <li><a href="#go-deeper" data-marker="go-deeper" data-opens-depth><span class="label">Deeper</span><span class="margin__name">Go deeper</span></a></li>
+        <li><a href="#worktree-method" data-marker="worktree-method"><span class="label">02</span><span class="margin__name">Worktree method</span></a></li>
+        <li><a href="#proof-contract" data-marker="proof-contract"><span class="label">03</span><span class="margin__name">Proof contract</span></a></li>
+        <li><a href="#receipt" data-marker="receipt"><span class="label">Receipt</span><span class="margin__name">Receipt</span></a></li>
+      </ul>
+    </nav>
     <!-- /region:nav -->
     <main id="main" class="content">
       <!-- region:top -->
-      <header id="top" class="region hero"><h1 class="display">Jevvy</h1></header>
+      <header id="top" class="region hero">
+        <p class="hero__running label">
+          <span>Jev + Claude Code · Agent field guide · adapted</span>
+          <span>Murat Baturay · 2026</span>
+        </p>
+        <h1 class="display hero__title" data-reveal>Stop paying a writer to answer yes or no.</h1>
+        <p class="hero__deck" data-reveal style="--i:1">A field guide to splitting judgment from execution in Claude Code agents, with Jev answering the bounded questions.</p>
+        <aside class="sticky hero__credit" data-reveal style="--i:2" aria-label="Credit">
+          Adapted from the <a href="https://x.com/cyrilxbt" rel="noopener">Agent Field Guide by @cyrilxbt</a> and a source article on the Jev + Claude Code stack (<span data-article-link>link pending</span>). Rebuilt, reworded, and fact-checked, September 2026.
+        </aside>
+        <ul class="hero__chips" data-reveal style="--i:3">
+          <li><a class="chip" href="#control-plane">01 Control plane</a></li>
+          <li><a class="chip" href="#worktree-method">02 Worktree method</a></li>
+          <li><a class="chip" href="#proof-contract">03 Proof contract</a></li>
+        </ul>
+      </header>
       <!-- /region:top -->
       <!-- region:control-plane -->
       <section id="control-plane" class="region chapter" aria-labelledby="h-control-plane"><h2 id="h-control-plane" class="headline">01 · The Control Plane</h2></section>
