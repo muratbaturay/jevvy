@@ -11,7 +11,8 @@ colors:
   marker: "oklch(88% 0.17 95)"
   mint: "oklch(91% 0.06 190)"
   teal: "oklch(47% 0.10 195)"
-  signal: "oklch(58% 0.19 28)"
+  signal: "oklch(49% 0.19 28)"
+  marker-deep: "oklch(48% 0.12 90)"
 typography:
   display:
     fontFamily: "Anton, Impact, 'Arial Narrow', sans-serif"
@@ -175,8 +176,10 @@ Warm paper and ink with three working colours and one alarm colour.
   14px and above only.
 
 ### Tertiary
-- **Signal Red** (`oklch(58% 0.19 28)`): collisions, REFUTED, a missing
+- **Signal Red** (`oklch(49% 0.19 28)`): collisions, REFUTED, a missing
   evidence slot, an invalid ledger input. Nowhere else.
+- **Marker Deep** (`oklch(48% 0.12 90)`): the INCOMPLETE stamp only, a
+  yellow dark enough to read as text on card-white.
 
 ### Neutral
 - **Paper** (`oklch(96.5% 0.012 85)`): page background.
@@ -232,12 +235,12 @@ Nothing is centred except the receipt.
 
 Flat print with one trick. Cards sit on the paper with a 1px ink border and
 a hard 2px offset shadow, like a stuck-on sticker. Nothing blurs except the
-sticky note. Depth otherwise comes from paper tone (the depth layer is
+sticky note. Printed paper does not hover: cards have no hover lift. Depth otherwise comes from paper tone (the depth layer is
 lighter) and from bars sitting "on top" of the grid.
 
 ### Shadow Vocabulary
-- **Sticker** (`box-shadow: 2px 2px 0 oklch(20% 0.01 60)`): all cards at
-  rest; on hover the card moves 1px up-left and the offset grows to 3px.
+- **Sticker** (`box-shadow: 2px 2px 0 oklch(20% 0.01 60)`): all cards, at
+  rest and on hover alike.
 - **Sticky** (`box-shadow: 0 2px 6px oklch(0% 0 0 / 0.12)`): sticky notes
   only.
 
@@ -274,7 +277,7 @@ note. Everything else is a hard offset or nothing.
   coloured border.
 
 ### Navigation
-- Ruled margin at 64px with mono line numbers in rule colour and five
+- Ruled margin at 72px with mono line numbers in rule colour and five
   markers in ink-soft; the active marker gets a marker-yellow highlight and
   ink text. Medium widths hide the numbers; narrow widths use a sticky top
   bar with the five markers as short labels, 44px tall.
@@ -285,11 +288,18 @@ review stamps and VERIFIED, signal red for REFUTED, ink-soft for UNKNOWN,
 marker for INCOMPLETE), `mix-blend-mode: multiply`, landing with a 250 ms
 scale-in. It is the page's one recurring "moving print" motif.
 
+### Worktree columns
+Card-white faces with the usual ink border. Colour is state only: mint once
+merged, a solid signal outline while a collision is live, a dashed signal
+outline afterwards, with COLLIDED / REWORKED marks in signal stamps.
+
 ### Flow list (narrow-width mirror of the SVG flow)
 Below 700px the chapter 1 SVG is replaced by `.flow-list`, a vertical list of
 the same stations. State is mirrored through classes on the demo root
 (`is-gate-allowed`, `is-gate-fallback`, `is-jev-dim`, `is-path-fallback`) and
-`is-at` / `is-visited` on items; unvisited items sit at 55% opacity.
+`is-at` / `is-visited` on items; unvisited items use ink-soft text and a rule
+border (never opacity, so contrast holds). Under reduced motion the list is
+shown beside the diagram as the static step list.
 
 ### Ledger (depth layer)
 Two sticker cards side by side from 700px, "Before" and "After", each a
