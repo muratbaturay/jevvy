@@ -1,0 +1,49 @@
+/* Jevvy tokens. Colours in OKLCH only. Never #000 / #fff. */
+:root {
+  color-scheme: light;
+
+  --paper:        oklch(96.5% 0.012 85);
+  --paper-inset:  oklch(98%   0.008 85);
+  --card:         oklch(99%   0.004 85);
+  --ink:          oklch(20%   0.01  60);
+  --ink-soft:     oklch(42%   0.01  60);
+  --rule:         oklch(86%   0.01  85);
+  --marker:       oklch(88%   0.17  95);
+  --mint:         oklch(91%   0.06  190);
+  --teal:         oklch(47%   0.10  195);
+  --signal:       oklch(58%   0.19  28);
+  --shadow-soft:  oklch(0% 0 0 / 0.12);
+
+  --font-display: Anton, Impact, "Arial Narrow", sans-serif;
+  --font-mono:    "Courier Prime", "Courier New", monospace;
+  --font-serif:   Literata, Georgia, serif;
+
+  --fs-display:  clamp(2.75rem, 8vw, 6.5rem);
+  --fs-headline: clamp(1.5rem, 3.2vw, 2.5rem);
+  --fs-title:    1rem;
+  --fs-body:     0.95rem;
+  --fs-label:    0.72rem;
+  --fs-depth-h:  clamp(1.35rem, 2.4vw, 1.75rem);
+  --fs-depth:    1.0625rem;
+  --fs-receipt:  0.85rem;
+
+  --sp-xs: 4px;  --sp-sm: 8px;  --sp-md: 16px;
+  --sp-lg: 24px; --sp-xl: 40px; --sp-2xl: 64px;
+  --sp-section: clamp(4rem, 10vw, 8rem);
+
+  --radius-sm: 4px;
+  --radius-md: 6px;
+
+  --margin-w: 64px;
+  --content-max: 1180px;
+  --measure: 65ch;
+
+  --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --dur-fast: 200ms;
+  --dur-mid: 300ms;
+  --dur-slow: 400ms;
+
+  --shadow-sticker: 2px 2px 0 var(--ink);
+  --shadow-sticker-hover: 3px 3px 0 var(--ink);
+  --shadow-sticky: 0 2px 6px var(--shadow-soft);
+}

@@ -1,0 +1,11 @@
+{
+  "name": "jevvy",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "The Jev + Claude Code field guide, as an interactive web page.",
+  "scripts": {
+    "test": "node --test 'tests/**/*.test.js'",
+    "dev": "python3 -m http.server 4173 --bind 127.0.0.1"
+  }
+}
